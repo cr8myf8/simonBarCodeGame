@@ -3,24 +3,37 @@
   <head>
     <title>Socket.IO Code Says</title>
   </head>
+ <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
  <script src="/js/socket.io.js"></script>
   <script>
     var socket = io.connect('http://localhost:4400');
     socket.on('connected', function(data) {    
-      alert("connected 2 browser:"+data);
-      console.log("socket connect browser")
-      }); 
+      //alert("connected 2 browser:"+data);
+
     socket.on('newColorEvent', function(data) {    
-      alert("connected 2 browser:"+data);
-      console.log("socket connect browser")
-      }); 
+      //alert("new color:"+data);
+      console.log("new color:"+data);
+    });
+
+    socket.on('endOfGame', function() {    
+      //alert("!!!!!! GAME OVER !!!!!!");
+      console.log("GAME IS OVER");
+    });
+
+    $("#startGame").click(function (data) {    
+      socket.emit("startGame");
+	  });
+
+    }); 
+ 
   </script>
 
   <body>
-    <img src="images/red.jpg" style="width:104px;height:104px;"><br><br><br><br>
-    <img src="images/blue.jpg" style="width:104px;height:104px;"><br><br><br><br>
-    <img src="images/green.jpg" style="width:104px;height:104px;"><br><br><br><br>
-    <img src="images/yellow.jpg" style="width:104px;height:104px;">
+    <img src="images/1.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
+    <img src="images/2.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
+    <img src="images/3.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
+    <img src="images/4.png" style="width:74px;height:74px;">
+    <input type="button" id="startGame" value="start_Game">
   </body>
 
 </html>
