@@ -12,3 +12,6 @@ pubspec.lock
 doc/api/
 
 .idea/
+
+client/test/
+client/lib/src/todo_list/
