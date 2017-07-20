@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO Code Says</title>
+  </head>
+ <script src="/js/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:4400');
+    socket.on('connected', function(data) {    
+      alert("connected 2 browser");
+      console.log("socket connect browser")
+      }); 
+  </script>
+
+  <body>
+    <img src="images/red.jpg" style="width:104px;height:104px;"><br><br><br><br>
+    <img src="images/blue.jpg" style="width:104px;height:104px;"><br><br><br><br>
+    <img src="images/green.jpg" style="width:104px;height:104px;"><br><br><br><br>
+    <img src="images/yellow.jpg" style="width:104px;height:104px;">
+  </body>
+
+</html>
