@@ -13,5 +13,5 @@ doc/api/
 
 .idea/
 
-client/test/
-client/lib/src/todo_list/
+test/
+lib/src/todo_list/
