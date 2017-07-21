@@ -5,10 +5,10 @@ import 'package:angular2/angular2.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
 
-import 'src/welcome/welcome_component.dart';
-import 'src/play/play_component.dart';
-import 'src/leaderboard/leaderboard_component.dart';
-import 'src/socket_service.dart';
+import 'src/components/welcome/welcome_component.dart';
+import 'src/components/play/play_component.dart';
+import 'src/components/leaderboard/leaderboard_component.dart';
+import 'package:simon/src/services/socket_service.dart';
 
 @Component(
   selector: 'my-app',
@@ -28,7 +28,6 @@ import 'src/socket_service.dart';
 ])
 class AppComponent {
   final SocketService socketService;
-  AppComponent(this.socketService) {
-    socketService.openSocket();
-  }
+  
+  AppComponent(this.socketService) { }
 }

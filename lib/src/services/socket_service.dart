@@ -7,14 +7,11 @@ class SocketService {
 
   SocketService() {
     print('initialize service');
-    
-//    socket.on('event', (data) => print(data));
-//    socket.on('disconnect', (_) => print('disconnect'));
-//    socket.on('fromServer', (_) => print(_));
+    IO.Socket socket = IO.io('http://localhost:3000');
+    socket.on('connected', (data) => print('connected: $data'));
+    socket.on('event', (data) => print(data));
+    socket.on('disconnect', (_) => print('disconnect'));
+    socket.on('fromServer', (_) => print(_));
   }
   
-  void openSocket() {
-    IO.Socket socket = IO.io('http://localhost:3000');
-    socket.on('connected', (_) => print('connected'));
-  }
 }
