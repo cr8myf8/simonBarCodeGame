@@ -8,11 +8,13 @@ var io 		= require('socket.io')(server);
 const totalGameTime = 20000; // in milliseconds
 var prevColor = 1;
 
-app.use(express.static(__dirname + '/resources'));
+// app.use(express.static(__dirname + '/resources'));
+app.use(express.static(__dirname + '/../build/web/'));
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+// app.get('/', function (req, res) {
+//   // res.sendFile(__dirname + '/index.html');
+//   res.sendFile(__dirname + '/../web/index.html');
+// });
 
 io.on('connection', function (socket) {
   console.log("Socket Connected");
@@ -21,10 +23,6 @@ io.on('connection', function (socket) {
   var port = new SerialPort('COM3', {
     autoOpen: false,
     baudRate: 115200
-  });
-  
-  server.listen(3000, function() {
-    console.log('socket on port 3000');
   });
 
   /** Returns a random integer between min (inclusive) and max (inclusive)
@@ -77,4 +75,8 @@ io.on('connection', function (socket) {
     console.error("error", err);
   });
 
+});
+
+server.listen(3000, function() {
+  console.log('socket on port 3000');
 });
