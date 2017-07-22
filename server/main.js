@@ -3,10 +3,12 @@ const app = express();
 // var server 	= require('http').Server(app);
 var server 	= require('http').createServer(app);
 var io 		= require('socket.io')(server);
+var SerialPort = require('serialport');
+var Readline = SerialPort.parsers.Readline;
 
-// var scanner = require("./scanner.js");
 const totalGameTime = 20000; // in milliseconds
 var prevColor = 1;
+var gamePoint = 0;
 
 app.use(express.static(__dirname + '/resources'));
 
@@ -16,11 +18,14 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
   console.log("Socket Connected");
-  var SerialPort = require('serialport');
-  var Readline = SerialPort.parsers.Readline;
   var port = new SerialPort('COM3', {
-    autoOpen: false,
-    baudRate: 115200
+      autoOpen: false,
+      baudRate: 115200
+      });
+  SerialPort.list(function (err, ports) {
+    ports.forEach(function(port) {
+      console.log(port.comName);
+    });
   });
 
   /** Returns a random integer between min (inclusive) and max (inclusive)
@@ -40,6 +45,7 @@ io.on('connection', function (socket) {
   socket.emit('connected', 123);
   socket.on('startGame', function(data) {
     //socket.emit("newColorEvent",1);
+   gamePoint = 0;
    port.open(function(){});
     mainGameLoop();
   });
@@ -57,11 +63,13 @@ io.on('connection', function (socket) {
 	  mbRec = mbRec.toString();
     console.log('Data:', data);
     console.log('scanned:'+ mbRec+" prevColor:"+prevColor);
-    if(Number.parseInt(mbRec) === prevColor){
+    if(Number.parseInt(mbRec) === prevColor){ // indicates correct scan in game
       var newColor = getRandomInt(1,4);
       prevColor = newColor;
       console.log('color:', newColor);
       socket.emit("newColorEvent", newColor);
+      gamePoint++;
+      socket.emit("updatePoints",gamePoint);
     }
   });
 

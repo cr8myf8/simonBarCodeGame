@@ -6,13 +6,17 @@
  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
  <script src="/js/socket.io.js"></script>
   <script>
-    var socket = io.connect('http://localhost:4400');
+    var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {    
       //alert("connected 2 browser:"+data);
 
     socket.on('newColorEvent', function(data) {    
       //alert("new color:"+data);
       console.log("new color:"+data);
+    });
+
+    socket.on('updatePoints',function(data){
+      $("textarea#point").val(data);
     });
 
     socket.on('endOfGame', function() {    
@@ -29,11 +33,13 @@
   </script>
 
   <body>
+    <label for="male">points</label> 
+    <textarea readonly="readonly" id="point"></textarea>
+    <input type="button" id="startGame" value="start_Game"><br><br>
     <img src="images/1.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
     <img src="images/2.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
     <img src="images/3.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
     <img src="images/4.png" style="width:74px;height:74px;">
-    <input type="button" id="startGame" value="start_Game">
   </body>
 
 </html>
