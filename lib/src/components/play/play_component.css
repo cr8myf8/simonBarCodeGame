@@ -17,6 +17,9 @@
 }
 
 .color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 43vw;
   height: 43vh;
   margin: 1vh 1vw;

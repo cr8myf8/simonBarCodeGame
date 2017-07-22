@@ -1,5 +1,5 @@
 analyzer:
-  strong-mode: true
+  strong-mode: false
 #   exclude:
 #     - path/to/excluded/files/**
 

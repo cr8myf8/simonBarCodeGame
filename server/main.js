@@ -1,33 +1,27 @@
-const express = require('express')
-const app = express()
-var server 	= require('http').Server(app);
+const express = require('express');
+const app = express();
+// var server 	= require('http').Server(app);
+var server 	= require('http').createServer(app);
 var io 		= require('socket.io')(server);
 
-const totalGameTime = 20000; // in miliseconds
+// var scanner = require("./scanner.js");
+const totalGameTime = 20000; // in milliseconds
 var prevColor = 1;
 
-//var scanner = require("./scanner.js");
-//app.use(express.static(__dirname + '/images'));
 app.use(express.static(__dirname + '/resources'));
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
-})
-
-app.listen(3000, function () {
-  console.log('listening on port 3000!')
 });
 
-server.listen(4400);
-
 io.on('connection', function (socket) {
-  console.log("Socket Connected")
+  console.log("Socket Connected");
   var SerialPort = require('serialport');
   var Readline = SerialPort.parsers.Readline;
   var port = new SerialPort('COM3', {
     autoOpen: false,
     baudRate: 115200
-  });     
+  });
 
   /** Returns a random integer between min (inclusive) and max (inclusive)
    * Using Math.round() will give you a non-uniform distribution! */
@@ -80,3 +74,7 @@ io.on('connection', function (socket) {
   });
 
 });
+
+server.listen(3000, function() {
+    console.log('socket on port 3000');
+  });
