@@ -22,10 +22,6 @@ io.on('connection', function (socket) {
     autoOpen: false,
     baudRate: 115200
   });
-  
-  server.listen(3000, function() {
-    console.log('socket on port 3000');
-  });
 
   /** Returns a random integer between min (inclusive) and max (inclusive)
    * Using Math.round() will give you a non-uniform distribution! */
@@ -78,3 +74,7 @@ io.on('connection', function (socket) {
   });
 
 });
+
+server.listen(3000, function() {
+    console.log('socket on port 3000');
+  });
