@@ -9,52 +9,56 @@ var Readline = SerialPort.parsers.Readline;
 const totalGameTime = 20000; // in milliseconds
 var prevColor = 1;
 var gamePoint = 0;
+var comPorts = new Array;
 
 app.use(express.static(__dirname + '/resources'));
 
 app.get('/', function (req, res) {
+  comPorts.length=0;
+  SerialPort.list(function (err, ports) {
+    ports.forEach(function(port) {
+     comPorts.push (port.comName);      
+      console.log(port.comName);
+    } );
+  });
+
   res.sendFile(__dirname + '/index.html');
 });
 
 io.on('connection', function (socket) {
+  var port = new SerialPort("COM3", {
+    baudRate: 115200
+   });;
   console.log("Socket Connected");
-  var port = new SerialPort('COM3', {
-      autoOpen: false,
-      baudRate: 115200
-      });
-  SerialPort.list(function (err, ports) {
-    ports.forEach(function(port) {
-      console.log(port.comName);
-    });
-  });
-
   /** Returns a random integer between min (inclusive) and max (inclusive)
    * Using Math.round() will give you a non-uniform distribution! */
   function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function mainGameLoop(){
-    setTimeout(function(){ // start Timer to End Game
+  socket.emit('connected', comPorts);
+
+  socket.on('startGame', function(data) {
+   console.log("game started:"+data)
+    //socket.emit("newColorEvent",1);
+   gamePoint = 0;
+   /*
+   port = new SerialPort(data, {
+    baudRate: 115200
+   });
+   port.open(function(){});
+   setTimeout(function(){ // start Timer to End Game
       socket.emit('endOfGame'); 
       port.close(function(){});
     }, totalGameTime);
-    //socket.emit("newColorEvent",getRandomInt(1,4) );
-  }
-
-  socket.emit('connected', 123);
-  socket.on('startGame', function(data) {
-    //socket.emit("newColorEvent",1);
-   gamePoint = 0;
-   port.open(function(){});
-    mainGameLoop();
+    */
+   socket.emit("newColorEvent", getRandomInt(1,4));
   });
 
   /* Serial Port Stuff */
 
-
   port.on('open', function() {
-    console.log("port opened")
+    console.log("port opened:",port.path)
   });
 
   port.on('data', function (data) {

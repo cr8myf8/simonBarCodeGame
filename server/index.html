@@ -9,6 +9,18 @@
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {    
       //alert("connected 2 browser:"+data);
+      var x = document.getElementById("myCOM");
+      data.forEach (function(element){
+        var option = document.createElement("option");
+        option.text = element;
+        x.add(option, x[0]);
+      });
+
+      $("#startGame").click(function (data) {    
+      console.log( $('#myCOM:selected').text());
+      socket.emit("startGame", $('#myCOM :selected').text() );
+	    });
+    }); 
 
     socket.on('newColorEvent', function(data) {    
       //alert("new color:"+data);
@@ -23,18 +35,15 @@
       //alert("!!!!!! GAME OVER !!!!!!");
       console.log("GAME IS OVER");
     });
-
-    $("#startGame").click(function (data) {    
-      socket.emit("startGame");
-	  });
-
-    }); 
  
   </script>
 
   <body>
     <label for="male">points</label> 
     <textarea readonly="readonly" id="point"></textarea>
+    <form>
+      <select id="myCOM" ></select>
+    </form>
     <input type="button" id="startGame" value="start_Game"><br><br>
     <img src="images/1.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
     <img src="images/2.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
