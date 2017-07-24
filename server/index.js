@@ -36,7 +36,7 @@ io.on('connect', function(socket) {
   
   // when the user clicks play and after a 3-2-1 countdown
   socket.on('start game', function() {
-    if (portError === null) {
+    // if (portError === null) {
       console.log('Game started!');
   
       // open the serial port for the scanner
@@ -61,15 +61,17 @@ io.on('connect', function(socket) {
           socket.emit('new color', prevColor);
         }
       });
-    }
-    else {
-      console.log('Not starting the game because there is no open port');
-    }
+    // }
+    // else {
+    //   console.log('Not starting the game because there is no open port');
+    // }
   });
   
   socket.on('end game', function() {
-    port.close();
-    socket.emit('game over');
+    if (port.isOpen) {
+      port.close();
+    }
+    console.log('Game is now over');
   });
 });
 

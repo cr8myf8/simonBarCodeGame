@@ -1,20 +1,23 @@
 <div class="header">
   <div>Player: {{name}}</div>
-  <div>{{timerMsg}}</div>
+  <div *ngIf="countDown > -1">{{timerMsg}}</div>
+  <div *ngIf="countDown < 0">{{gameTimerMsg}}</div>
   <div>Score: {{score}}</div>
 </div>
 
+{{countDown}}
+
 <div class="container">
-  <div class="color" id="green">
+  <div #one class="color" id="green">
     <img src="assets/1.png">
   </div>
-  <div class="color" id="red">
+  <div #two class="color" id="red">
     <img src="assets/2.png">
   </div>
-  <div class="color" id="yellow">
+  <div #three class="color" id="yellow">
     <img src="assets/3.png">
   </div>
-  <div class="color" id="blue">
+  <div #four class="color" id="blue">
     <img src="assets/4.png">
   </div>
 </div>
