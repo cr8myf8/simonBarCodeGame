@@ -13,16 +13,21 @@ app.use(express.static(__dirname + '/../build/web/'));
 
 // app.get('/', function (req, res) {
 //   // res.sendFile(__dirname + '/index.html');
-//   res.sendFile(__dirname + '/../web/index.html');
 // });
 
-io.on('connection', function (socket) {
+io.on('connect', function (socket) {
   console.log("Socket Connected");
   var SerialPort = require('serialport');
   var Readline = SerialPort.parsers.Readline;
-  var port = new SerialPort('COM3', {
+  // var port = new SerialPort('COM3', {
+  // var port = new SerialPort('/dev/tty.Bluetooth-Incoming-Port', {
+  var port = new SerialPort('/dev/tty.usbmodem1411', {
     autoOpen: false,
     baudRate: 115200
+  });
+  
+  port.open(function() {
+    console.log('port.open says: i opened a port!');
   });
 
   /** Returns a random integer between min (inclusive) and max (inclusive)
@@ -41,6 +46,7 @@ io.on('connection', function (socket) {
 
   socket.emit('connected', 123);
   socket.on('startGame', function(data) {
+    console.log('look, I started a game');
     //socket.emit("newColorEvent",1);
    port.open(function(){});
     mainGameLoop();
@@ -50,7 +56,7 @@ io.on('connection', function (socket) {
 
 
   port.on('open', function() {
-    console.log("port opened")
+    console.log("port.on('open') says: port opened")
   });
 
   port.on('data', function (data) {
