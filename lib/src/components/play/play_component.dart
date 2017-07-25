@@ -82,10 +82,6 @@ class PlayComponent implements OnInit {
               socket.disconnect();
               gameTimer.cancel();
 //              gameInProgress = false;
-              
-              //TODO: put score in leaders
-              //TODO: sore them in leaderboard_service onInit
-              //TODO: navigate to leaderboard, passing along name and score to display
             }
           });
         }
