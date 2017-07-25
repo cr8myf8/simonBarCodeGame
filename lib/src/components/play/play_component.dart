@@ -9,6 +9,9 @@ import 'package:angular2/router.dart';
 import 'package:angular2/platform/common.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import 'package:simon/src/models/leader.dart';
+import 'package:simon/src/services/leaderboard_service.dart';
+
 @Component(
   selector: 'play',
   styleUrls: const ['play_component.css'],
@@ -19,9 +22,11 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
   ],
   providers: const [],
 )
-class PlayComponent implements AfterViewInit, OnInit {
+class PlayComponent implements OnInit {
   final RouteParams _routeParams;
+  final Router _router;
   final Location _location;
+  final LeaderboardService _leaderboardService;
 
   IO.Socket socket;
   String name;
@@ -32,34 +37,39 @@ class PlayComponent implements AfterViewInit, OnInit {
   Timer countDownTimer;
   
   String gameTimerMsg;
-  int gameTime = 10;
+  int gameTime = 5;
   Timer gameTimer;
+  bool gameInProgress = false;
   
   @ViewChild('one') ElementRef green;
   @ViewChild('two') ElementRef red;
   @ViewChild('three') ElementRef yellow;
   @ViewChild('four') ElementRef blue;
   
-  PlayComponent(this._routeParams, this._location) {}
+  PlayComponent(this._router, this._routeParams,
+      this._location, this._leaderboardService) {}
 
   void ngOnInit() {
+    print('running oninit');
     name = _routeParams.get('name');
 
     socket = IO.io('http://localhost:3000');
     socket.on('connect', (_) {
       print('Socket connected (client)');
-
+      
       // need to send something stupid initially so that it will keep listening
-      socket.emit('stay awake');
+      socket.emit('client');
 
+      socket.on('server', (_) => print('handshake'));
+      
       countDownTimer = new Timer.periodic(const Duration(seconds: 1), (Timer countDownTimer) {
         countDown--;
         timerMsg = countDown > 0 ? 'BEGIN IN ${countDown}' : 'GO!';
 
-        if (countDown <= 0) {
+        if (countDown == 0) {
           socket.emit('start game');
           countDownTimer.cancel();
-          countDown = -1;
+          gameInProgress = true;
           
           gameTimer = new Timer.periodic(const Duration(seconds: 1), (Timer gameTimer) {
             gameTime--;
@@ -67,11 +77,14 @@ class PlayComponent implements AfterViewInit, OnInit {
 
             if (gameTime == 0) {
               print('game over');
-              socket.emit('end game');
+              _updateLeaderboard();
+              socket.emit('end game', _leaderboardService.getJSONLeaders());
+              socket.disconnect();
               gameTimer.cancel();
+//              gameInProgress = false;
               
               //TODO: put score in leaders
-              //TODO: sort them in leaderboard_service onInit
+              //TODO: sore them in leaderboard_service onInit
               //TODO: navigate to leaderboard, passing along name and score to display
             }
           });
@@ -82,53 +95,32 @@ class PlayComponent implements AfterViewInit, OnInit {
     socket.on('new color', (data) {
       print('new color: $data');
       HTML.Animation animation;
+      HTML.Element element;
       switch (data) {
         case 1:
-          animation = green.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-          break;
+          element = green.nativeElement; break;
         case 2:
-          animation = red.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-          break;
+          element = red.nativeElement; break;
         case 3:
-          animation = yellow.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-          break;
+          element = yellow.nativeElement; break;
         case 4:
-          animation = blue.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-          break;
+          element = blue.nativeElement; break;
       }
+      animation = element.animate([{"opacity": 100}, {"opacity": 0}], 150);
       animation.play();
     });
 
     socket.on('point', (_) => score++);
 
-    socket.on('disconnected', (_) => print('Socket disconnected (client)'));
+    socket.on('disconnected', (_) => print('socket disconnected (server)'));
   }
   
-  void ngAfterViewInit() {
-//    socket.on('new color', (data) {
-//      print('new color: $data');
-//      //TODO: animate the corresponding square
-//      HTML.Animation animation;
-//      switch (data) {
-//        case 1:
-//          animation = green.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-//          break;
-//        case 2:
-//          animation = red.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-//          break;
-//        case 3:
-//          animation = yellow.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-//          break;
-//        case 4:
-//          animation = blue.nativeElement.animate([{"opacity": 75}, {"opacity": 0}], 200);
-//          break;
-//      }
-//      animation.play();
-//    });
-//
-//    socket.on('point', (_) => score++);
-//
-//    socket.on('disconnected', (_) => print('Socket disconnected (client)'));
+  void _updateLeaderboard() {
+//    Leader player = new Leader(name, score);
+    Leader player = new Leader(name, 25);
+    _leaderboardService.leaders.add(player);
+    _leaderboardService.leaders.sort((a, b) => b.score.compareTo(a.score));
+    this._router.navigate(['Leaderboard', player.toMap()]);
   }
 
   void goBack() => _location.back();

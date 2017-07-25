@@ -1,7 +1,7 @@
 <div class="header">
   <div>Player: {{name}}</div>
-  <div *ngIf="countDown > -1">{{timerMsg}}</div>
-  <div *ngIf="countDown < 0">{{gameTimerMsg}}</div>
+  <div *ngIf="!gameInProgress">{{timerMsg}}</div>
+  <div *ngIf="gameInProgress">{{gameTimerMsg}}</div>
   <div>Score: {{score}}</div>
 </div>
 

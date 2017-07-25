@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.3",
+    "fs": "0.0.1-security",
     "serialport": "^5.0.0-beta7",
     "socket.io": "^2.0.3"
   }

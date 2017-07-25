@@ -28,5 +28,7 @@ import 'package:simon/src/services/leaderboard_service.dart';
   const Route(path: '/leaderboard', name: 'Leaderboard', component: LeaderboardComponent),
 ])
 class AppComponent {
-
+  final LeaderboardService _leaderboardService;
+  
+  AppComponent(this._leaderboardService) {}
 }
