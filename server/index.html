@@ -9,16 +9,16 @@
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {    
       //alert("connected 2 browser:"+data);
-      var x = document.getElementById("myCOM");
-      data.forEach (function(element){
-        var option = document.createElement("option");
-        option.text = element;
-        x.add(option, x[0]);
-      });
+      // var x = document.getElementById("myCOM");
+      // data.forEach (function(element){
+      //   var option = document.createElement("option");
+      //   option.text = element;
+      //   x.add(option, x[0]);
+      // });
 
       $("#startGame").click(function (data) {    
       console.log( $('#myCOM:selected').text());
-      socket.emit("startGame", $('#myCOM :selected').text() );
+      socket.emit("startGame" );
 	    });
     }); 
 
@@ -28,6 +28,7 @@
     });
 
     socket.on('updatePoints',function(data){
+      console.log("Points:"+data);
       $("textarea#point").val(data);
     });
 
@@ -36,19 +37,43 @@
       console.log("GAME IS OVER");
     });
  
-  </script>
+</script>
+<style>
+.code1{
+  position: absolute;
+  right: 100px;
+  width: 74px;
+  height: 74px; 
+}
+.code2{
+  position: absolute;
+  right: 350px;
+  width: 74px;
+  height: 74px; 
+}
+.code3{
+  position: absolute;
+  right: 600px;
+  width: 74px;
+  height: 74px; 
+}
+.code4{
+  position: absolute;
+  right: 850px;
+  width: 74px;
+  height: 74px; 
+}
+</style>
 
   <body>
     <label for="male">points</label> 
     <textarea readonly="readonly" id="point"></textarea>
-    <form>
-      <select id="myCOM" ></select>
-    </form>
+    <!-- <form><select id="myCOM" ></select></form> -->
     <input type="button" id="startGame" value="start_Game"><br><br>
-    <img src="images/1.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
-    <img src="images/2.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
-    <img src="images/3.png" style="width:74px;height:74px;"><br><br><br><br><br><br>
-    <img src="images/4.png" style="width:74px;height:74px;">
+    <img src="images/1.png" class="code1" ><br><br><br><br><br><br><br>
+    <img src="images/2.png" class="code2"><br><br><br><br><br><br><br>
+    <img src="images/3.png" class="code3" ><br><br><br><br><br><br><br> 
+    <img src="images/4.png" class="code4" >
   </body>
 
 </html>
