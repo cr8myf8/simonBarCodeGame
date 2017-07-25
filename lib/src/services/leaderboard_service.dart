@@ -11,6 +11,7 @@ class LeaderboardService {
   
   LeaderboardService() {
     HttpRequest.getString('assets/leaderboard.json').then((String fileContents) {
+      print(fileContents);
       List<Map> jsonLeaders = JSON.decode(fileContents);
       for (Map leader in jsonLeaders) {
         leaders.add(new Leader.fromMap(leader));

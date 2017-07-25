@@ -6,7 +6,6 @@ import 'dart:html' as HTML;
 import 'package:angular2/angular2.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
-import 'package:angular2/platform/common.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:simon/src/models/leader.dart';
@@ -25,99 +24,124 @@ import 'package:simon/src/services/leaderboard_service.dart';
 class PlayComponent implements OnInit {
   final RouteParams _routeParams;
   final Router _router;
-  final Location _location;
   final LeaderboardService _leaderboardService;
 
-  IO.Socket socket;
+  IO.Socket socket = IO.io('http://127.0.0.1:3000');
   String name;
-  num score = 0;
+  num score;
 
   String timerMsg;
-  int countDown = 4;
+  int countDown;
   Timer countDownTimer;
   
   String gameTimerMsg;
-  int gameTime = 5;
+  int gameTime;
   Timer gameTimer;
-  bool gameInProgress = false;
+  bool gameInProgress;
   
   @ViewChild('one') ElementRef green;
   @ViewChild('two') ElementRef red;
   @ViewChild('three') ElementRef yellow;
   @ViewChild('four') ElementRef blue;
   
-  PlayComponent(this._router, this._routeParams,
-      this._location, this._leaderboardService) {}
+  PlayComponent(this._router, this._routeParams, this._leaderboardService) {}
 
   void ngOnInit() {
-    print('running oninit');
+    print('on init');
     name = _routeParams.get('name');
+    score = 0;
+    countDown = 4;
+    gameTime = 30;
+    gameInProgress = false;
 
-    socket = IO.io('http://localhost:3000');
+//    socket = IO.io('http://127.0.0.1:3000');
+//    socket = IO.io('http://localhost:3000');
+    socket.connect();
     socket.on('connect', (_) {
       print('Socket connected (client)');
       
       // need to send something stupid initially so that it will keep listening
       socket.emit('client');
-
       socket.on('server', (_) => print('handshake'));
       
+      // start a 3 - 2 - 1 countdown before beginning the game
       countDownTimer = new Timer.periodic(const Duration(seconds: 1), (Timer countDownTimer) {
         countDown--;
         timerMsg = countDown > 0 ? 'BEGIN IN ${countDown}' : 'GO!';
 
+        // when the countDown is done, start the game
         if (countDown == 0) {
           socket.emit('start game');
-          countDownTimer.cancel();
+          countDownTimer.cancel();    // TODO: figure out why this doesn't stop it
           gameInProgress = true;
           
+          // start the game timer
           gameTimer = new Timer.periodic(const Duration(seconds: 1), (Timer gameTimer) {
             gameTime--;
             gameTimerMsg = gameTime > 0 ? gameTime.toString() : 'END GAME';
 
             if (gameTime == 0) {
               print('game over');
-              _updateLeaderboard();
-              socket.emit('end game', _leaderboardService.getJSONLeaders());
-              socket.disconnect();
               gameTimer.cancel();
-//              gameInProgress = false;
+              _updateLeaderboard();
             }
           });
         }
       });
     });
 
+    // when the socket (server) sends a new color, animate the corresponding square
     socket.on('new color', (data) {
       print('new color: $data');
       HTML.Animation animation;
       HTML.Element element;
       switch (data) {
-        case 1:
-          element = green.nativeElement; break;
-        case 2:
-          element = red.nativeElement; break;
-        case 3:
-          element = yellow.nativeElement; break;
-        case 4:
-          element = blue.nativeElement; break;
+        case 1: element = green.nativeElement; break;
+        case 2: element = red.nativeElement; break;
+        case 3: element = yellow.nativeElement; break;
+        case 4: element = blue.nativeElement; break;
       }
       animation = element.animate([{"opacity": 100}, {"opacity": 0}], 150);
       animation.play();
     });
 
-    socket.on('point', (_) => score++);
+    // when the server acknowledges a correct scan, update the score
+    socket.on('point', (_) {
+      score++;
+    });
+    
+    // when the server indicates it has written the leaderboard file
+    socket.on('ended game', (_) {
+      _cleanupSocket();
+    });
 
     socket.on('disconnected', (_) => print('socket disconnected (server)'));
   }
   
+  // send current player and score to leaderboard list, sort it, and go to leaderboard page
   void _updateLeaderboard() {
-//    Leader player = new Leader(name, score);
-    Leader player = new Leader(name, 25);
+    Leader player = new Leader(name, score);
     _leaderboardService.leaders.add(player);
     _leaderboardService.leaders.sort((a, b) => b.score.compareTo(a.score));
+    socket.emit('end game', _leaderboardService.getJSONLeaders());
     this._router.navigate(['Leaderboard', player.toMap()]);
   }
+  
+  // clean everything up so more games can be played
+  void _cleanupSocket() {
+    socket.clearListeners();
+    socket.disconnect();
+//    socket.destroy();
+    socket.close();
+  }
 
-  void goBack() => _location.back();
+  // reset everything if user clicks Quit button so more games can be played
+  void quit() {
+    gameInProgress = false;
+    if (countDownTimer.isActive) countDownTimer.cancel();
+    if (gameTimer.isActive) gameTimer.cancel();
+    _cleanupSocket();
+    this._router.navigate(['Welcome']);
+  }
+  
 }
