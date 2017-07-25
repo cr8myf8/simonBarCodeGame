@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-// var server 	= require('http').Server(app);
-var server 	= require('http').createServer(app);
-var io 		= require('socket.io')(server);
+// var server   = require('http').Server(app);
+var server  = require('http').createServer(app);
+var io    = require('socket.io')(server);
 var SerialPort = require('serialport');
 var fs = require('fs');
 
