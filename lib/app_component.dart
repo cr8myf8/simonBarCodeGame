@@ -5,10 +5,11 @@ import 'package:angular2/angular2.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
 
-import 'src/components/welcome/welcome_component.dart';
-import 'src/components/play/play_component.dart';
-import 'src/components/leaderboard/leaderboard_component.dart';
-import 'package:simon/src/services/socket_service.dart';
+import 'package:simon/src/components/welcome/welcome_component.dart';
+import 'package:simon/src/components/play/play_component.dart';
+import 'package:simon/src/components/leaderboard/leaderboard_component.dart';
+
+import 'package:simon/src/services/leaderboard_service.dart';
 
 @Component(
   selector: 'my-app',
@@ -19,7 +20,7 @@ import 'package:simon/src/services/socket_service.dart';
 //    WelcomeComponent, PlayComponent, LeaderboardComponent,
     ROUTER_DIRECTIVES
   ],
-  providers: const [materialProviders, ROUTER_PROVIDERS, SocketService],
+  providers: const [materialProviders, ROUTER_PROVIDERS, LeaderboardService],
 )
 @RouteConfig(const [
   const Route(path: '/welcome', name: 'Welcome', component: WelcomeComponent, useAsDefault: true),
@@ -27,7 +28,7 @@ import 'package:simon/src/services/socket_service.dart';
   const Route(path: '/leaderboard', name: 'Leaderboard', component: LeaderboardComponent),
 ])
 class AppComponent {
-  final SocketService socketService;
+  final LeaderboardService _leaderboardService;
   
-  AppComponent(this.socketService) { }
+  AppComponent(this._leaderboardService) {}
 }

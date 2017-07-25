@@ -1,3 +1,7 @@
 <div>LEADERBOARD</div>
 
+<div *ngFor="let leader of leaders">
+  {{leader.name}}   {{leader.score}}
+</div>
+
 <material-button raised (trigger)="goBack()">New Game</material-button>

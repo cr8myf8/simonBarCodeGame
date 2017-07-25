@@ -17,8 +17,8 @@ import 'package:angular2/router.dart';
   providers: const [materialProviders]
 )
 class WelcomeComponent {
-  String name = "";
   final Router _router;
+  String name = "";
   
   WelcomeComponent(this._router);
   

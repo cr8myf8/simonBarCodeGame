@@ -5,6 +5,9 @@ import 'package:angular2/angular2.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
 
+import 'package:simon/src/services/leaderboard_service.dart';
+import 'package:simon/src/models/leader.dart';
+
 @Component(
   selector: 'leaderboard',
   styleUrls: const ['leaderboard_component.css'],
@@ -17,8 +20,12 @@ import 'package:angular2/router.dart';
 )
 class LeaderboardComponent {
   final Router _router;
+  final LeaderboardService leaderboardService;
+  List<Leader> leaders;
   
-  LeaderboardComponent(this._router);
+  LeaderboardComponent(this._router, this.leaderboardService) {
+    leaders = leaderboardService.leaders;
+  }
   
   void goBack() {
     _router.navigate(['Welcome']);
