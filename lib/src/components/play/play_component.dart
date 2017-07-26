@@ -56,7 +56,6 @@ class PlayComponent implements OnInit {
 
     socket = IO.io('http://127.0.0.1:3000');
 //    socket = IO.io('http://localhost:3000');
-//    socket.connect();
     socket.on('connect', (_) {
       print('Socket connected (client)');
       
