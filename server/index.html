@@ -19,6 +19,9 @@
       $("#startGame").click(function (data) {    
       console.log( $('#myCOM:selected').text());
       socket.emit("startGame" );
+      $.ajax({url: '/play', success: function(data) {
+        window.location.href('localhost:3000/play.html')
+      }});
 	    });
     }); 
 
