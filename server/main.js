@@ -25,12 +25,23 @@ var comPorts = new Array; // This was an attempt to define comport via browser a
 app.use(express.static(__dirname + '/resources'));
 
 app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/welcome.html');
+});
+
+app.get('/game', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/leaderBoard', function (req, res) {
+  res.sendFile(__dirname + '/leaderBoard.html');
+});
+
+var allClients = [];
 io.on('connection', function (socket) {
-  
-  console.log("Socket Connected");
+  allClients.push(socket);
+  //console.log(socket["id"])
+  for (var itr = 0; itr < allClients.length; itr++)
+    console.log("Sockets:"+allClients[itr]["id"]+":");
   /** Returns a random integer between min (inclusive) and max (inclusive)
    * Using Math.round() will give you a non-uniform distribution! */
 

@@ -1,21 +1,28 @@
 <html>
-<body background="images/retail-blue.jpg" >
+
+<script src="/js/socket.io.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+var socket = io.connect('http://localhost:3000');
+socket.on('connected', function(data) {    
+    console.log("Welcome Socket");
+
+    $("#startGame").click(function() {
+        console.log("Begin Game");
+        //socket.emit("startGame" );
+        window.location.href = "/game";
+    });
+    
+}); 
+</script>
+
+
+<body background="images/BlueMedical.jpg" >
 <div>Welcome!</div>
 
-<input label="Name"
-                required
-                [(ngModel)]="name"
-></input>
-
-<button raised
-                 [disabled]="name == ''"
-                 (trigger)="play()"
->Play!
-</button>
-
-<button raised
-                 (trigger)="scores()"
->Leaderboard
-</button>
+<input label="Name" required[(ngModel)]="name">
+<!-- <button raised(trigger)="scores()">Leaderboard</button> -->
+<input type="button" id="startGame" value="Start Game">
+<input type="button" id="leaderBoard" value="Leader Board">
 </body>
 </html>

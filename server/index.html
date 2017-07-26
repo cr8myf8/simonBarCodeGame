@@ -9,29 +9,27 @@
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {    
 
-      $("#startGame").click(function (data) {    
-      console.log( $('#myCOM:selected').text());
-      socket.emit("startGame" );
+      $("#mainMenu").click(function (data) {    
+        window.location.href = "/";
+      });
       
+      socket.on('newColorEvent', function(data) {    
+        //alert("new color:"+data);
+        console.log("new color:"+data);
+      });
+
+      socket.on('updatePoints',function(data){
+        console.log("Points:"+data);
+        $("textarea#point").val(data);
+      });
+
+      socket.on('endOfGame', function() {    
+        //alert("!!!!!! GAME OVER !!!!!!");
+        console.log("GAME IS OVER");
       });
         
     }); 
 
-    socket.on('newColorEvent', function(data) {    
-      //alert("new color:"+data);
-      console.log("new color:"+data);
-    });
-
-    socket.on('updatePoints',function(data){
-      console.log("Points:"+data);
-      $("textarea#point").val(data);
-    });
-
-    socket.on('endOfGame', function() {    
-      //alert("!!!!!! GAME OVER !!!!!!");
-      console.log("GAME IS OVER");
-    });
- 
 </script>
 <style>
 .header {
@@ -88,7 +86,7 @@
     <label for="male">points</label> 
     <textarea readonly="readonly" id="point"></textarea>
     <!-- <form><select id="myCOM" ></select></form> -->
-    <input type="button" id="startGame" value="start_Game"><br><br>
+    <input type="button" id="mainMenu" value="Back"><br><br>
     <div class="container">
       <div #one class="color" id="green">
         <img src="images/1.png">
