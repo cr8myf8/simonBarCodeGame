@@ -1,25 +1,20 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO Code Says</title>
+    <title>Code Says</title>
   </head>
  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
  <script src="/js/socket.io.js"></script>
   <script>
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {    
-      //alert("connected 2 browser:"+data);
-      // var x = document.getElementById("myCOM");
-      // data.forEach (function(element){
-      //   var option = document.createElement("option");
-      //   option.text = element;
-      //   x.add(option, x[0]);
-      // });
 
       $("#startGame").click(function (data) {    
       console.log( $('#myCOM:selected').text());
       socket.emit("startGame" );
-	    });
+      
+      });
+        
     }); 
 
     socket.on('newColorEvent', function(data) {    
@@ -39,41 +34,75 @@
  
 </script>
 <style>
-.code1{
-  position: absolute;
-  right: 100px;
-  width: 74px;
-  height: 74px; 
+.header {
+  display: flex;
+  justify-content: space-between;
+  height: 5vh;
+  width: 88vw;
+  padding: 0 1vw;
 }
-.code2{
-  position: absolute;
-  right: 350px;
-  width: 74px;
-  height: 74px; 
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  height: 90vh;
+  width: 90vw;
 }
-.code3{
-  position: absolute;
-  right: 600px;
-  width: 74px;
-  height: 74px; 
+
+.color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43vw;
+  height: 43vh;
+  margin: 1vh 1vw;
 }
-.code4{
-  position: absolute;
-  right: 850px;
-  width: 74px;
-  height: 74px; 
+
+.color > img {
+  width: 20vw;
+  height: 20vw;
+  border: 1px solid black;
+}
+
+#green {
+  background-color: green;
+}
+
+#red {
+  background-color: red;
+}
+
+#yellow {
+  background-color: yellow;
+}
+
+#blue {
+  background-color: blue;
 }
 </style>
 
-  <body>
+  <body background="images/retail-blue.jpg" >
     <label for="male">points</label> 
     <textarea readonly="readonly" id="point"></textarea>
     <!-- <form><select id="myCOM" ></select></form> -->
     <input type="button" id="startGame" value="start_Game"><br><br>
-    <img src="images/1.png" class="code1" ><br><br><br><br><br><br><br>
-    <img src="images/2.png" class="code2"><br><br><br><br><br><br><br>
-    <img src="images/3.png" class="code3" ><br><br><br><br><br><br><br> 
-    <img src="images/4.png" class="code4" >
+    <div class="container">
+      <div #one class="color" id="green">
+        <img src="images/1.png">
+      </div>
+      <div #two class="color" id="red">
+        <img src="images/2.png">
+      </div>
+      <div #three class="color" id="yellow">
+        <img src="images/3.png">
+      </div>
+      <div #four class="color" id="blue">
+        <img src="images/4.png">
+      </div>
+    </div>
   </body>
 
 </html>

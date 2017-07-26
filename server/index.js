@@ -4,34 +4,24 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const SerialPort = require('serialport');
 const fs = require('fs');
-const port = new SerialPort('/dev/tty.usbmodem1411', {
-  autoOpen: false,
-  baudRate: 115200
+
+const port = new SerialPort('COM3', {
+    autoOpen: false,
+    baudRate: 115200
 });
+
 var prevColor;
 var newColor;
 
 // serve up the front end files
 app.use(express.static(__dirname + '/../build/web/'));
 
-// log when the port is opened
-port.on('open', function() {
-  console.log('The port is now open');
-});
 
-// log when the port is closed
-port.on('close', function() {
-  console.log('The port is now closed');
-});
-
-// log if there is an error on the port
-port.on('error', function(err) {
-  console.error('Error on the port: ', err);
-});
 
 // initiate a socket connection
 io.on('connection', function(socket) {
   console.log('Socket Connected (server)!');
+  
   
   // log out possible errors
   socket.on('error', function(err) {
@@ -72,6 +62,21 @@ io.on('connection', function(socket) {
         console.log('new color: ' + newColor);
       }
     });
+    // log when the port is opened
+    port.on('open', function() {
+      console.log('The port is now open');
+    });
+
+    // log when the port is closed
+    port.on('close', function() {
+      console.log('The port is now closed');
+    });
+
+    // log if there is an error on the port
+    port.on('error', function(err) {
+      console.error('Error on the port: ', err);
+    });
+
   });
   
   socket.on('end game', function(leaderboard) {

@@ -1,0 +1,21 @@
+<html>
+<body background="images/retail-blue.jpg" >
+<div>Welcome!</div>
+
+<input label="Name"
+                required
+                [(ngModel)]="name"
+></input>
+
+<button raised
+                 [disabled]="name == ''"
+                 (trigger)="play()"
+>Play!
+</button>
+
+<button raised
+                 (trigger)="scores()"
+>Leaderboard
+</button>
+</body>
+</html>
