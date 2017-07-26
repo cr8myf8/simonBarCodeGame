@@ -26,7 +26,7 @@ class PlayComponent implements OnInit {
   final Router _router;
   final LeaderboardService _leaderboardService;
 
-  IO.Socket socket = IO.io('http://127.0.0.1:3000');
+  IO.Socket socket;
   String name;
   num score;
 
@@ -54,9 +54,9 @@ class PlayComponent implements OnInit {
     gameTime = 30;
     gameInProgress = false;
 
-//    socket = IO.io('http://127.0.0.1:3000');
+    socket = IO.io('http://127.0.0.1:3000');
 //    socket = IO.io('http://localhost:3000');
-    socket.connect();
+//    socket.connect();
     socket.on('connect', (_) {
       print('Socket connected (client)');
       
