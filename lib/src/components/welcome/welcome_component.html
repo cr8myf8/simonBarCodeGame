@@ -1,18 +1,20 @@
-<div>Welcome!</div>
+<section class="welcome">
+  <div id="inputs">
+    <material-input label="Name"
+                    floatingLabel
+                    required
+                    [(ngModel)]="name"
+    ></material-input>
 
-<material-input label="Name"
-                floatingLabel
-                required
-                [(ngModel)]="name"
-></material-input>
+    <material-button raised
+                     [disabled]="name == ''"
+                     (trigger)="play()"
+    >Play!
+    </material-button>
 
-<material-button raised
-                 [disabled]="name == ''"
-                 (trigger)="play()"
->Play!
-</material-button>
-
-<material-button raised
-                 (trigger)="scores()"
->Leaderboard
-</material-button>
+    <material-button raised
+                     (trigger)="scores()"
+    >Leaderboard
+    </material-button>
+  </div>
+</section>

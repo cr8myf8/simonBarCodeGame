@@ -1,7 +1,9 @@
-<div>LEADERBOARD</div>
+<section class="leaderboard">
+  <div>LEADERBOARD</div>
 
-<div *ngFor="let leader of leaders">
-  {{leader.name}}   {{leader.score}}
-</div>
+  <div *ngFor="let leader of leaders">
+    {{leader.name}}   {{leader.score}}
+  </div>
 
-<material-button raised (trigger)="goBack()">New Game</material-button>
+  <material-button raised (trigger)="goBack()">New Game</material-button>
+</section>
