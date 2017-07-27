@@ -5,11 +5,13 @@ const io = require('socket.io')(server);
 const SerialPort = require('serialport');
 const fs = require('fs');
 const port = new SerialPort('/dev/tty.usbmodem1411', {
-  autoOpen: false,
-  baudRate: 115200
+  autoOpen: true,
+  baudRate: 115200,
+  parser: SerialPort.parsers.Readline
 });
 var prevColor;
 var newColor;
+var gameSocket;
 
 // serve up the front end files
 app.use(express.static(__dirname + '/../build/web/'));
@@ -31,7 +33,11 @@ port.on('error', function(err) {
 
 // initiate a socket connection
 io.on('connection', function(socket) {
+  gameSocket = socket;
   console.log('Socket Connected (server)!');
+  console.log(socket['id']);
+  var open = port.isOpen ? 'OPEN' : 'CLOSED';
+  console.log('PORT IS ' + open);
   
   // log out possible errors
   socket.on('error', function(err) {
@@ -51,7 +57,7 @@ io.on('connection', function(socket) {
     // open the serial port for the scanner
     if (!port.isOpen) {
       console.log('Opening serial port');
-      port.open();
+      //port.open();
     }
 
     // send a color
@@ -60,18 +66,7 @@ io.on('connection', function(socket) {
     console.log('new color: ' + prevColor);
 
     // when the user scans a code
-    port.on('data', function(data) {
-      var mbRec = parseInt(new Buffer(data, 'utf-8'));
-      console.log('scanned: ' + mbRec + ' expected: ' + prevColor);
-      // if they got it right, send a point and a new color
-      if (mbRec === prevColor) {
-        newColor = getRandomInt(1, 4);
-        socket.emit('point');
-        socket.emit('new color', newColor);
-        prevColor = newColor;
-        console.log('new color: ' + newColor);
-      }
-    });
+    // portOnData(socket);
   });
   
   socket.on('end game', function(leaderboard) {
@@ -82,15 +77,23 @@ io.on('connection', function(socket) {
       }
     });
     if (port.isOpen) {
-      port.close();
+      //port.close();
     }
     console.log('Game is now over');
-    socket.emit('ended game');
+    // socket.emit('ended game');
+  });
+  
+  socket.on('quit game', function() {
+    if (port.isOpen) {
+      //port.close();
+    }
+    console.log('Game exited by user');
   });
   
   socket.on('disconnect', function() {
-    console.log('socket disconnected (client)');
+    console.log('socket disconnected (client)' + socket['id']);
     socket.removeAllListeners();
+    socket.disconnect(true);
   });
 });
 
@@ -105,3 +108,17 @@ server.listen(3000, function() {
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+  port.on('data', function(data) {
+    var mbRec = parseInt(new Buffer(data, 'utf-8'));
+    console.log(gameSocket['id']);
+    console.log('scanned: ' + mbRec + ' expected: ' + prevColor);
+    // if they got it right, send a point and a new color
+    if (mbRec === prevColor) {
+      newColor = getRandomInt(1, 4);
+      gameSocket.emit('point');
+      gameSocket.emit('new color', newColor);
+      prevColor = newColor;
+      console.log('new color: ' + newColor);
+    }
+  });

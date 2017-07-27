@@ -4,6 +4,7 @@
                     floatingLabel
                     required
                     [(ngModel)]="name"
+                    (keyup.Enter)="play()"
     ></material-input>
 
     <material-button raised

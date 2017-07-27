@@ -38,6 +38,8 @@ class PlayComponent implements OnInit {
   int gameTime;
   Timer gameTimer;
   bool gameInProgress;
+
+  HTML.Animation animation;
   
   @ViewChild('one') ElementRef green;
   @ViewChild('two') ElementRef red;
@@ -54,15 +56,15 @@ class PlayComponent implements OnInit {
     gameTime = 30;
     gameInProgress = false;
 
-    socket = IO.io('http://127.0.0.1:3000');
+    socket = IO.io('http://127.0.0.1:3000', {'forceNew': true});
 //    socket = IO.io('http://localhost:3000');
     socket.on('connect', (_) {
       print('Socket connected (client)');
-      
+
       // need to send something stupid initially so that it will keep listening
       socket.emit('client');
       socket.on('server', (_) => print('handshake'));
-      
+
       // start a 3 - 2 - 1 countdown before beginning the game
       countDownTimer = new Timer.periodic(const Duration(seconds: 1), (Timer countDownTimer) {
         countDown--;
@@ -71,17 +73,18 @@ class PlayComponent implements OnInit {
         // when the countDown is done, start the game
         if (countDown == 0) {
           socket.emit('start game');
+          print('start game at ${new DateTime.now()}');
           countDownTimer.cancel();    // TODO: figure out why this doesn't stop it
           gameInProgress = true;
-          
-          // start the game timer
+//
+//          // start the game timer
           gameTimer = new Timer.periodic(const Duration(seconds: 1), (Timer gameTimer) {
             gameTime--;
             gameTimerMsg = gameTime > 0 ? gameTime.toString() : 'END GAME';
-
+//
             if (gameTime == 0) {
               print('game over');
-              gameTimer.cancel();
+//              gameTimer.cancel();
               _updateLeaderboard();
             }
           });
@@ -91,8 +94,10 @@ class PlayComponent implements OnInit {
 
     // when the socket (server) sends a new color, animate the corresponding square
     socket.on('new color', (data) {
+      if (animation != null) {
+        animation.cancel();
+      }
       print('new color: $data');
-      HTML.Animation animation;
       HTML.Element element;
       switch (data) {
         case 1: element = green.nativeElement; break;
@@ -102,17 +107,21 @@ class PlayComponent implements OnInit {
       }
       animation = element.animate([{"opacity": 100}, {"opacity": 0}], 150);
       animation.play();
+//      animation.cancel();
     });
 
     // when the server acknowledges a correct scan, update the score
     socket.on('point', (_) {
       score++;
     });
-    
+
     // when the server indicates it has written the leaderboard file
-    socket.on('ended game', (_) {
-      _cleanupSocket();
-    });
+//    socket.on('ended game', (_) {
+//      gameInProgress = false;
+//      if (countDownTimer.isActive) countDownTimer.cancel();
+//      if (gameTimer.isActive) gameTimer.cancel();
+//      _cleanupSocket();
+//    });
 
     socket.on('disconnected', (_) => print('socket disconnected (server)'));
   }
@@ -123,6 +132,10 @@ class PlayComponent implements OnInit {
     _leaderboardService.leaders.add(player);
     _leaderboardService.leaders.sort((a, b) => b.score.compareTo(a.score));
     socket.emit('end game', _leaderboardService.getJSONLeaders());
+    gameInProgress = false;
+    if (countDownTimer.isActive) countDownTimer.cancel();
+    if (gameTimer.isActive) gameTimer.cancel();
+    _cleanupSocket();
     this._router.navigate(['Leaderboard', player.toMap()]);
   }
   
@@ -130,12 +143,13 @@ class PlayComponent implements OnInit {
   void _cleanupSocket() {
     socket.clearListeners();
     socket.disconnect();
-//    socket.destroy();
+    socket.destroy();
     socket.close();
   }
 
   // reset everything if user clicks Quit button so more games can be played
   void quit() {
+    socket.emit('quit game');
     gameInProgress = false;
     if (countDownTimer.isActive) countDownTimer.cancel();
     if (gameTimer.isActive) gameTimer.cancel();
