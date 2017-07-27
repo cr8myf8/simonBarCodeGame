@@ -10,7 +10,8 @@ var fs = require('fs');
 var userConfig = fs.readFileSync('../CONFIG.json').toString();
 userConfig = JSON.parse(userConfig);
 
-const totalGameTime = userConfig["GAMETIME"]; // in milliseconds
+const totalGameTime = 20000;//userConfig["GAMETIME"]; // in milliseconds
+console.log("game time:"+totalGameTime);
 /****** End of Connected Socket ******/
 var prevColor = 1;
 var gamePoint = 0;
@@ -19,7 +20,8 @@ var comPorts = new Array; // This was an attempt to define comport via browser a
  /* Port Setup */
   var contents = fs.readFileSync('../CONFIG.json').toString();
   var port = new SerialPort(userConfig["SCANNERPORT"], {
-      baudRate: 115200
+      baudRate: 115200,
+      parser: SerialPort.parsers.readline
   });
 
 app.use(express.static(__dirname + '/resources'));
@@ -29,38 +31,45 @@ app.get('/', function (req, res) {
 });
 
 app.get('/game', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/game.html');
 });
 
 app.get('/leaderBoard', function (req, res) {
   res.sendFile(__dirname + '/leaderBoard.html');
 });
 
-var allClients = [];
+var gameSocket;
 io.on('connection', function (socket) {
-  allClients.push(socket);
-  //console.log(socket["id"])
-  for (var itr = 0; itr < allClients.length; itr++)
-    console.log("Sockets:"+allClients[itr]["id"]+":");
-  /** Returns a random integer between min (inclusive) and max (inclusive)
-   * Using Math.round() will give you a non-uniform distribution! */
-
+  //console.log(Object.keys(io.sockets.sockets));
   socket.emit('connected', comPorts);
 
   socket.on('startGame', function() {
-    console.log("game started:")
+    gameSocket = socket;
+    console.log("game started:"+socket["id"])
       //socket.emit("newColorEvent",1);
     gamePoint = 0;
     socket.emit("updatePoints",gamePoint);
-    socket.emit("newColorEvent", getRandomInt(1,4));
+    prevColor = getRandomInt(1,4);
+    socket.emit("newColorEvent", prevColor);
     setTimeout(function(){ // start Timer to End Game
       console.log("Serv End of Game")
         socket.emit('endOfGame');
     }, totalGameTime);
   });
 
-  /****** Serial Port Stuff ******/ 
+  socket.on('disconnect', function () {
+        console.log('disconnected event');
+        console.log(socket["id"]);
+  });
 
+  socket.on("movePage", function (){
+    socket.disconnect();
+  });
+});
+/****** End of Connected Socket ******/
+
+
+  /****** Serial Port Stuff ******/ 
  /* Port Events */
   port.on('open', function() {
     console.log("port opened:",port.path)
@@ -68,6 +77,7 @@ io.on('connection', function (socket) {
   });
 /* Game Logic exits in on Data Event. This event really drives the game */
   port.on('data', function (data) {
+    console.log(Object.keys(io.sockets.sockets));
     var mbRec = new Buffer(data, 'utf-8')
 	  mbRec = mbRec.toString();
     //console.log('Data:', data);
@@ -75,10 +85,10 @@ io.on('connection', function (socket) {
     if(Number.parseInt(mbRec) === prevColor){ // indicates correct scan in game
       var newColor = getRandomInt(1,4);
       prevColor = newColor;
-      console.log('color:', newColor);
-      socket.emit("newColorEvent", newColor);
-      gamePoint++;
-      socket.emit("updatePoints",gamePoint);
+      console.log('SUCCESS !!! new color:', newColor);
+      gameSocket.emit("newColorEvent", newColor);
+      console.log("recorded points:"+ ++gamePoint);
+      gameSocket.emit("updatePoints",gamePoint);
     }
   });
 
@@ -90,13 +100,12 @@ io.on('connection', function (socket) {
     console.error("error", err);
   });
 /****** End of Serial Port Stuff ******/
-});
-/****** End of Connected Socket ******/
 
 server.listen(3000, function() {
     console.log('socket on port 3000');
   });
 /****** General Functions ******/
 function getRandomInt(min, max) {
+    
       return Math.floor(Math.random() * (max - min + 1)) + min;
 }

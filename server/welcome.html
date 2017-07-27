@@ -5,12 +5,17 @@
 <script>
 var socket = io.connect('http://localhost:3000');
 socket.on('connected', function(data) {    
-    console.log("Welcome Socket");
+    console.log("Welcome Socket"+socket["id"]);
 
     $("#startGame").click(function() {
         console.log("Begin Game");
-        //socket.emit("startGame" );
+        socket.emit("movePage");
         window.location.href = "/game";
+    });
+
+    $("#leaderBoard").click(function() {
+        socket.emit("movePage");
+        window.location.href = "/leaderBoard";
     });
     
 }); 
