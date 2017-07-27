@@ -10,7 +10,6 @@ import 'package:simon/src/components/play/play_component.dart';
 import 'package:simon/src/components/leaderboard/leaderboard_component.dart';
 
 import 'package:simon/src/services/leaderboard_service.dart';
-import 'package:simon/src/services/socket_service.dart';
 
 @Component(
   selector: 'my-app',
@@ -21,7 +20,7 @@ import 'package:simon/src/services/socket_service.dart';
 //    WelcomeComponent, PlayComponent, LeaderboardComponent,
     ROUTER_DIRECTIVES
   ],
-  providers: const [materialProviders, ROUTER_PROVIDERS, SocketService, LeaderboardService],
+  providers: const [materialProviders, ROUTER_PROVIDERS, LeaderboardService],
 )
 @RouteConfig(const [
   const Route(path: '/welcome', name: 'Welcome', component: WelcomeComponent, useAsDefault: true),
@@ -30,7 +29,6 @@ import 'package:simon/src/services/socket_service.dart';
 ])
 class AppComponent {
   final LeaderboardService _leaderboardService;
-  final SocketService _socketService;
   
-  AppComponent(this._leaderboardService, this._socketService) {}
+  AppComponent(this._leaderboardService) {}
 }
