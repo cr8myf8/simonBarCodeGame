@@ -9,7 +9,7 @@ class Leader {
   Map toMap() {
     return {
       'name': name,
-      'score': score
+      'score': score.toString()
     };
   }
 }

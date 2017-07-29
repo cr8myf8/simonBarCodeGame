@@ -45,5 +45,5 @@
 material-button {
   font-size: 2vh;
   border: 1px solid;
-  border-radius: 10%;
+  border-radius: 10% !important;
 }

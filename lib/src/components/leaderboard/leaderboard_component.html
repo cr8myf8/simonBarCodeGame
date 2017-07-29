@@ -11,8 +11,8 @@
 <div id="title">LEADERBOARD</div>
 
 <div id="current-player">
-  <div id="name">name</div>
-  <div id="score">score</div>
+  <div id="name">{{name}}</div>
+  <div id="score">{{score}}</div>
 </div>
 
 <div id="high-scores">
@@ -23,4 +23,7 @@
   </div>
 </div>
 
-<material-button raised (trigger)="goBack()">New Game</material-button>
+<material-button raised
+                 (keypress)="newGame()"
+                 (trigger)="newGame()">New Game
+</material-button>
