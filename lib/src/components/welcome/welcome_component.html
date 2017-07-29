@@ -1,12 +1,12 @@
 <div id="inputs">
   <material-input id="nameInput" label="Name" floatingLabel
-                  required maxCount="15"
+                  required maxCount="10"
                   [(ngModel)]="name"
                   (keyup.Enter)="play()"
   ></material-input>
 
   <material-button raised
-                   [disabled]="name == '' || name.length > 15"
+                   [disabled]="name == '' || name.length > 10"
                    (trigger)="play()"
   >Play!
   </material-button>
