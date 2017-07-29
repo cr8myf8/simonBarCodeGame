@@ -1,23 +1,18 @@
-<section class="welcome">
-  <div id="inputs">
-    <material-input id="nameInput" label="Name"
-                    floatingLabel
-                    required
-                    maxCount="15"
-                    [(ngModel)]="name"
-                    (keyup.Enter)="play()"
-    ></material-input>
+<div id="inputs">
+  <material-input id="nameInput" label="Name" floatingLabel
+                  required maxCount="15"
+                  [(ngModel)]="name"
+                  (keyup.Enter)="play()"
+  ></material-input>
 
-    <material-button raised
-                     [disabled]="name == '' || name.length > 15"
-                     (trigger)="play()"
-    >Play!
-    </material-button>
+  <material-button raised
+                   [disabled]="name == '' || name.length > 15"
+                   (trigger)="play()"
+  >Play!
+  </material-button>
 
-    <material-button raised
-                     (trigger)="scores()"
-    >Leaderboard
-    </material-button>
-  </div>
-</section>
-
+  <material-button raised
+                   (trigger)="scores()"
+  >Leaderboard
+  </material-button>
+</div>
