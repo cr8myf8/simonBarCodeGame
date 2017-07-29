@@ -1,9 +1,26 @@
-<section class="leaderboard">
-  <div>LEADERBOARD</div>
+<!--<section class="leaderboard">-->
+  <!--<div>LEADERBOARD</div>-->
 
-  <div *ngFor="let leader of leaders">
-    {{leader.name}}   {{leader.score}}
+  <!--<div *ngFor="let leader of leaders">-->
+    <!--{{leader.name}}   {{leader.score}}-->
+  <!--</div>-->
+
+  <!--<material-button raised (trigger)="goBack()">New Game</material-button>-->
+<!--</section>-->
+
+<div id="title">LEADERBOARD</div>
+
+<div id="current-player">
+  <div id="name">name</div>
+  <div id="score">score</div>
+</div>
+
+<div id="high-scores">
+  <div *ngFor="let leader of leaders; let i = index" class="leaders">
+    <div>{{i + 1}}</div>
+    <div class="leader-name">{{leader.name}}</div>
+    <div class="leader-score">{{leader.score}}</div>
   </div>
+</div>
 
-  <material-button raised (trigger)="goBack()">New Game</material-button>
-</section>
+<material-button raised (trigger)="goBack()">New Game</material-button>
