@@ -22,8 +22,8 @@ import 'package:simon/src/services/leaderboard_service.dart';
   providers: const [],
 )
 class PlayComponent implements OnInit {
-  final RouteParams _routeParams;
   final Router _router;
+  final RouteParams _routeParams;
   final LeaderboardService _leaderboardService;
 
   IO.Socket socket;
