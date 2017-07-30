@@ -1,33 +1,42 @@
+.game {
+  background-image: url('assets/retail-blue.jpg');
+  width: 100%;
+  background-repeat: round;
+}
+
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   height: 5vh;
   width: 88vw;
-  padding: 0 1vw;
+  /*padding: 0 1vw;*/
+  margin-left: 4vw;
+  font-size: 5vh;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  /*justify-content: center;*/
-  /*align-items: center;*/
+  align-content: center;
+  align-items: center;
   height: 90vh;
-  width: 90vw;
+  width: 100vw;
 }
 
 .color {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 43vw;
+  width: 43vh;
   height: 43vh;
   margin: 1vh 1vw;
 }
 
 .color > img {
-  width: 20vw;
-  height: 20vw;
+  width: 10vw;
+  height: 10vw;
   border: 1px solid black;
 }
 
