@@ -5,7 +5,7 @@ const io = require('socket.io')(server);
 const SerialPort = require('serialport');
 const fs = require('fs');
 
-const port = new SerialPort('COM3', {
+const port = new SerialPort('/dev/tty.usbmodem1411', {
     autoOpen: false,
     baudRate: 115200
 });
