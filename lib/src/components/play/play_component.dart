@@ -22,8 +22,8 @@ import 'package:simon/src/services/leaderboard_service.dart';
   providers: const [],
 )
 class PlayComponent implements OnInit {
-  final RouteParams _routeParams;
   final Router _router;
+  final RouteParams _routeParams;
   final LeaderboardService _leaderboardService;
 
   IO.Socket socket;
@@ -52,9 +52,12 @@ class PlayComponent implements OnInit {
     print('on init');
     name = _routeParams.get('name');
     score = 0;
-    countDown = 4;
-    gameTime = 30;
+    countDown = 3;
+    gameTime = 31;
     gameInProgress = false;
+
+    timerMsg = countDown > 0 ? 'BEGIN IN ${countDown}' : 'GO!';
+    gameTimerMsg = gameTime > 0 ? gameTime.toString() : 'END GAME';
 
     socket = IO.io('http://127.0.0.1:3000', {'forceNew': true});
 //    socket = IO.io('http://localhost:3000');
@@ -75,10 +78,10 @@ class PlayComponent implements OnInit {
           socket.emit('start game');
           print('start game at ${new DateTime.now()}');
           countDownTimer.cancel();    // TODO: figure out why this doesn't stop it
-          gameInProgress = true;
 //
 //          // start the game timer
           gameTimer = new Timer.periodic(const Duration(seconds: 1), (Timer gameTimer) {
+            gameInProgress = true;
             gameTime--;
             gameTimerMsg = gameTime > 0 ? gameTime.toString() : 'END GAME';
 //

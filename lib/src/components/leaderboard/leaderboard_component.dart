@@ -20,14 +20,25 @@ import 'package:simon/src/models/leader.dart';
 )
 class LeaderboardComponent {
   final Router _router;
+  final RouteParams _routeParams;
   final LeaderboardService leaderboardService;
+  
+  String name;
+  String score;
   List<Leader> leaders;
   
-  LeaderboardComponent(this._router, this.leaderboardService) {
-    leaders = leaderboardService.leaders;
+  LeaderboardComponent(this._router, this._routeParams, this.leaderboardService) {
+    if (leaderboardService.leaders.length >= 10) {
+    leaders = leaderboardService.leaders.sublist(0, 10);
+    }
+    else {
+      leaders = leaderboardService.leaders;
+    }
+    name = _routeParams.get('name');
+    score = _routeParams.get('score');
   }
   
-  void goBack() {
+  void newGame() {
     _router.navigate(['Welcome']);
   }
 }

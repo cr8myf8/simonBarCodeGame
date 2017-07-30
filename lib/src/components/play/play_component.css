@@ -1,57 +1,95 @@
-.game {
-  background-image: url('assets/retail-blue.jpg');
-  width: 100%;
-  background-repeat: round;
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("assets/retail-blue.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-.header {
+#header {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   height: 5vh;
-  width: 88vw;
-  /*padding: 0 1vw;*/
-  margin-left: 4vw;
+  width: 98vw;
   font-size: 5vh;
 }
 
-.container {
+#name {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-start;
+  width: 33.33vw;
+}
+
+.time {
+  display: flex;
+  justify-content: center;
+  width: 33.33vw;
+}
+
+#score {
+  display: flex;
+  justify-content: flex-end;
+  width: 33.33vw;
+}
+
+#container {
+  display: flex;
   flex-wrap: wrap;
   align-content: center;
-  align-items: center;
-  height: 90vh;
-  width: 100vw;
+  justify-content: center;
+  /*height: 90vh;*/
+  /*width: 60vw;*/
+  height: 90%;
+  width: 50%;
+  background-image: url("assets/both.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 .color {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 43vh;
-  height: 43vh;
-  margin: 1vh 1vw;
+  width: 22vw;
+  height: 38vh;
+  margin: 1vw 1vw;
 }
 
-.color > img {
-  width: 10vw;
-  height: 10vw;
-  border: 1px solid black;
+#red > img {
+  margin-top: 2vh;
+  margin-left: 2vw;
+  width: 9vw;
 }
 
-#green {
-  background-color: green;
+#green > img {
+  margin-top: 2vh;
+  margin-right: 2vw;
+  width: 9vw;
 }
 
-#red {
-  background-color: red;
+#yellow > img {
+  margin-bottom: 2vh;
+  margin-left: 2vw;
+  width: 9vw;
 }
 
-#yellow {
-  background-color: yellow;
+#blue > img {
+  margin-bottom: 2vh;
+  margin-right: 2vw;
+  width: 9vw;
 }
 
-#blue {
-  background-color: blue;
+material-button {
+  position: absolute;
+  bottom: 0.5vh;
+  left: 0;
+  font-size: 2vh;
+  background-color: white;
 }

@@ -1,30 +1,23 @@
-<section class="game">
-  <div class="header">
-    <div>Player: {{name}}</div>
-    <div *ngIf="!gameInProgress">{{timerMsg}}</div>
-    <div *ngIf="gameInProgress">{{gameTimerMsg}}</div>
-    <div>Score: {{score}}</div>
-  </div>
+<div id="header">
+  <div id="name">Player: {{name}}</div>
+  <div *ngIf="!gameInProgress" class="time">{{timerMsg}}</div>
+  <div *ngIf="gameInProgress" class="time">{{gameTimerMsg}}</div>
+  <div id="score">Score: {{score}}</div>
+</div>
 
-<!--countDown: {{countDown}}-->
-<!--gameInProgress: {{gameInProgress}}-->
-<!--timerMsg: {{timerMsg}}-->
-<!--gameTimerMsg: {{gameTimerMsg}}-->
-<!--gameTime: {{gameTime}}-->
-
-  <div class="container">
-    <div #one class="color" id="green">
-      <img src="assets/1.png">
-    </div>
-    <div #two class="color" id="red">
-      <img src="assets/2.png">
-    </div>
-    <div #three class="color" id="yellow">
-      <img src="assets/3.png">
-    </div>
-    <div #four class="color" id="blue">
-      <img src="assets/4.png">
-    </div>
+<div id="container">
+  <div #one class="color" id="red">
+    <img src="assets/1.png">
   </div>
-</section>
+  <div #two class="color" id="green">
+    <img src="assets/2.png">
+  </div>
+  <div #three class="color" id="yellow">
+    <img src="assets/3.png">
+  </div>
+  <div #four class="color" id="blue">
+    <img src="assets/4.png">
+  </div>
+</div>
+
 <material-button raised (trigger)="quit()">Quit</material-button>

@@ -20,7 +20,7 @@ class LeaderboardService {
       }
     });
   }
-
+  
   List<Map> getJSONLeaders() {
     List<Map> jsonLeaders = [];
     for (Leader leader in leaders) {

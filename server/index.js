@@ -22,9 +22,9 @@ port.on('open', function() {
 });
 
 // log when the port is closed
-port.on('close', function() {
-  console.log('The port is now closed');
-});
+// port.on('close', function() {
+//   console.log('The port is now closed');
+// });
 
 // log if there is an error on the port
 port.on('error', function(err) {
@@ -35,9 +35,9 @@ port.on('error', function(err) {
 io.on('connection', function(socket) {
   gameSocket = socket;
   console.log('Socket Connected (server)!');
-  console.log(socket['id']);
-  var open = port.isOpen ? 'OPEN' : 'CLOSED';
-  console.log('PORT IS ' + open);
+  // console.log(socket['id']);
+  // var open = port.isOpen ? 'OPEN' : 'CLOSED';
+  // console.log('PORT IS ' + open);
   
   // log out possible errors
   socket.on('error', function(err) {
@@ -91,7 +91,7 @@ io.on('connection', function(socket) {
   });
   
   socket.on('disconnect', function() {
-    console.log('socket disconnected (client)' + socket['id']);
+    console.log('socket disconnected (client)' /*+ socket['id']*/);
     socket.removeAllListeners();
     socket.disconnect(true);
   });
@@ -111,7 +111,7 @@ function getRandomInt(min, max) {
 
   port.on('data', function(data) {
     var mbRec = parseInt(new Buffer(data, 'utf-8'));
-    console.log(gameSocket['id']);
+    // console.log(gameSocket['id']);
     console.log('scanned: ' + mbRec + ' expected: ' + prevColor);
     // if they got it right, send a point and a new color
     if (mbRec === prevColor) {
