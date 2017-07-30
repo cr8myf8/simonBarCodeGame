@@ -1,0 +1,34 @@
+<html>
+
+<script src="/js/socket.io.js"></script> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+var socket = io.connect('http://localhost:3000');
+socket.on('connected', function(data) {    
+    console.log("Welcome Socket"+socket["id"]);
+
+    $("#startGame").click(function() {
+        socket.emit("recordName",$("#playerName").val());
+        console.log( $("#playerName").val() );
+        socket.emit("movePage");
+        window.location.href = "/game";
+        
+    });
+
+    $("#leaderBoard").click(function() {
+        socket.emit("movePage");
+        window.location.href = "/leaderBoard";
+    });
+    
+}); 
+</script>
+
+
+<body background="images/BlueMedical.jpg" >
+<div>Welcome!</div>
+<input type="text" id="playerName" />
+<!-- <button raised(trigger)="scores()">Leaderboard</button> -->
+<input type="button" id="startGame" value="Start Game">
+<input type="button" id="leaderBoard" value="Leader Board">
+</body>
+</html>
