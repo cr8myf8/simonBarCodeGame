@@ -12,17 +12,19 @@
       socket.emit("startGame" );
 
       $("#mainMenu").click(function (data) {
+        socket.emit("movePage:"+socket["id"]);
         window.location.href = "/";
       });
 
       socket.on('updatePoints',function(data){
-        console.log("Points:"+data);
-        $("textarea#point").val(data);
+        console.log("Points:"+data+":"+socket["id"]);
+        $("p#point").text(data);
       });
 
       socket.on('endOfGame', function() {    
         //alert("!!!!!! GAME OVER !!!!!!");
-        console.log("GAME IS OVER");
+        console.log("GAME IS OVER"+socket["id"]);
+        window.location.href = "/leaderBoard";
       });
 
       socket.on('disconnect', function () {
@@ -31,8 +33,28 @@
 
       socket.on('newColorEvent', function(data) {     
         //alert("new color:"+data);
-        console.log("new color:"+data);
-        var num = parseInt(data);
+        console.log("new color:"+data["color"]+":"+data["difficulty"]);
+        var num = parseInt(data["color"]);
+        switch(num){
+          case 1:
+            $("#green").animate({opacity:".1"},data["difficulty"]);
+            $("#green").animate({opacity:"1"},data["difficulty"]);
+            break;
+            case 2:
+             $("#red").animate({opacity:".1"},data["difficulty"]);
+             $("#red").animate({opacity:"1"},data["difficulty"]);
+            break;
+            case 3:
+             $("#yellow").animate({opacity:".1"},data["difficulty"]);
+             $("#yellow").animate({opacity:"1"},data["difficulty"]);
+            break;
+            case 4:
+             $("#blue").animate({opacity:".1"},data["difficulty"]);
+             $("#blue").animate({opacity:"1"},data["difficulty"]);
+            break;
+            default:
+            console.log("case error");
+        }
         
       });
         
@@ -56,9 +78,15 @@
   /*justify-content: center;*/
   /*align-items: center;*/
   height: 90vh;
-  width: 90vw;
+  width: 100vw;
 }
-
+.gamePoints{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  margin:0;
+}
 .color {
   display: flex;
   justify-content: center;
@@ -92,24 +120,23 @@
 </style>
 
   <body background="images/retail-blue.jpg" >
-    <label for="male">points</label> 
-    <textarea readonly="readonly" id="point"></textarea>
+    <p class="gamePoints" id="point">0</p>
     <!-- <form><select id="myCOM" ></select></form> -->
-    <input type="button" id="mainMenu" value="Back"><br><br>
     <div class="container">
-      <div #one class="color" id="green">
+      <div class="color" id="green">
         <img src="images/1.png">
       </div>
-      <div #two class="color" id="red">
+      <div class="color" id="red">
         <img src="images/2.png">
       </div>
-      <div #three class="color" id="yellow">
+      <div class="color" id="yellow">
         <img src="images/3.png">
       </div>
-      <div #four class="color" id="blue">
+      <div class="color" id="blue">
         <img src="images/4.png">
       </div>
     </div>
+    <input type="button" id="mainMenu" value="Back">
   </body>
 
 </html>
