@@ -10,15 +10,16 @@ var fs = require('fs');
 var userConfig = fs.readFileSync('../CONFIG.json').toString();
 userConfig = JSON.parse(userConfig);
 
-const totalGameTime = 20000;//userConfig["GAMETIME"]; // in milliseconds
+const totalGameTime = userConfig["GAMETIME"]; // in milliseconds
 console.log("game time:"+totalGameTime);
-/****** End of Connected Socket ******/
+/****** Game Variables ******/
 var prevColor = 1;
 var gamePoint = 0;
-var comPorts = new Array; // This was an attempt to define comport via browser and was failure
+var currentPlayer ="fakeName";
+var leaderList = fs.readFileSync('../leaders.json').toString();
+leaderList = JSON.parse(leaderList);
 
- /* Port Setup */
-  var contents = fs.readFileSync('../CONFIG.json').toString();
+ /* Serial Port Setup */
   var port = new SerialPort(userConfig["SCANNERPORT"], {
       baudRate: 115200,
       parser: SerialPort.parsers.readline
@@ -38,10 +39,10 @@ app.get('/leaderBoard', function (req, res) {
   res.sendFile(__dirname + '/leaderBoard.html');
 });
 
-var gameSocket;
+var gameSocket; // magic socket pointer
 io.on('connection', function (socket) {
   //console.log(Object.keys(io.sockets.sockets));
-  socket.emit('connected', comPorts);
+  socket.emit('connected');
 
   socket.on('startGame', function() {
     gameSocket = socket;
@@ -50,11 +51,36 @@ io.on('connection', function (socket) {
     gamePoint = 0;
     socket.emit("updatePoints",gamePoint);
     prevColor = getRandomInt(1,4);
-    socket.emit("newColorEvent", prevColor);
+    socket.emit("newColorEvent", {
+      "color":prevColor,"difficulty":userConfig["GAMEDIFFICULTY"] });
     setTimeout(function(){ // start Timer to End Game
       console.log("Serv End of Game")
-        socket.emit('endOfGame');
+      socket.emit('endOfGame');
     }, totalGameTime);
+  });
+
+  socket.on('leaderPage', function () {
+    leaderListSort();
+    console.log ("post game leader list sort:"+leaderList[leaderList.length-1]) 
+    if (gamePoint > leaderList[leaderList.length-1]["point"]){
+        leaderList.push({"name":currentPlayer,"point":gamePoint})
+    }
+    leaderListSort(); // sort after placing new leader
+    socket.emit("currentPoints",{"name":currentPlayer,"point":gamePoint});
+    socket.emit("getLeaders",leaderList);
+      // limit leader list
+      if ( leaderList.length >7){
+        leaderList.pop(); // remove the lowest score
+        console.log(JSON.stringify(leaderList));
+      }
+    fs.writeFile("../leaders.json", JSON.stringify(leaderList), function(err) {}); 
+    gamePoint = 0;
+    currentPlayer = "";
+  });   
+
+  socket.on('recordName', function (data) {
+        console.log("current Player:"+data);
+        currentPlayer = data;
   });
 
   socket.on('disconnect', function () {
@@ -74,8 +100,11 @@ io.on('connection', function (socket) {
   port.on('open', function() {
     console.log("port opened:",port.path)
     console.log("Scanner Port Open Event")
+    console.log("****************************************")
+    console.log("************  Sever Ready  *************")
+    console.log("****************************************")
   });
-/* Game Logic exits in on Data Event. This event really drives the game */
+/* Game Logic happens in Serial Data Event. This event drives the game */
   port.on('data', function (data) {
     console.log(Object.keys(io.sockets.sockets));
     var mbRec = new Buffer(data, 'utf-8')
@@ -86,7 +115,9 @@ io.on('connection', function (socket) {
       var newColor = getRandomInt(1,4);
       prevColor = newColor;
       console.log('SUCCESS !!! new color:', newColor);
-      gameSocket.emit("newColorEvent", newColor);
+      //gameSocket.emit("newColorEvent", newColor);
+      gameSocket.emit("newColorEvent", {
+      "color":prevColor,"difficulty":userConfig["GAMEDIFFICULTY"] });
       console.log("recorded points:"+ ++gamePoint);
       gameSocket.emit("updatePoints",gamePoint);
     }
@@ -108,4 +139,9 @@ server.listen(3000, function() {
 function getRandomInt(min, max) {
     
       return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function leaderListSort(){
+  leaderList.sort(function(a,b){
+      return b.point - a.point;
+  });
 }

@@ -33,24 +33,24 @@
 
       socket.on('newColorEvent', function(data) {     
         //alert("new color:"+data);
-        console.log("new color:"+data+":"+socket["id"]);
-        var num = parseInt(data);
-        switch(data){
+        console.log("new color:"+data["color"]+":"+data["difficulty"]);
+        var num = parseInt(data["color"]);
+        switch(num){
           case 1:
-            $("#green").animate({opacity:".1"},"slow");
-            $("#green").animate({opacity:"1"},"slow");
+            $("#green").animate({opacity:".1"},data["difficulty"]);
+            $("#green").animate({opacity:"1"},data["difficulty"]);
             break;
             case 2:
-             $("#red").animate({opacity:".1"},"slow");
-             $("#red").animate({opacity:"1"},"slow");
+             $("#red").animate({opacity:".1"},data["difficulty"]);
+             $("#red").animate({opacity:"1"},data["difficulty"]);
             break;
             case 3:
-             $("#yellow").animate({opacity:".1"},"slow");
-             $("#yellow").animate({opacity:"1"},"slow");
+             $("#yellow").animate({opacity:".1"},data["difficulty"]);
+             $("#yellow").animate({opacity:"1"},data["difficulty"]);
             break;
             case 4:
-             $("#blue").animate({opacity:".1"},"slow");
-             $("#blue").animate({opacity:"1"},"slow");
+             $("#blue").animate({opacity:".1"},data["difficulty"]);
+             $("#blue").animate({opacity:"1"},data["difficulty"]);
             break;
             default:
             console.log("case error");

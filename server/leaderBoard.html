@@ -6,31 +6,100 @@
 var socket = io.connect('http://localhost:3000');
 socket.on('connected', function(data) {    
     console.log("Welcome Socket"+socket["id"]);
+    socket.emit("leaderPage");
 
-    $("#champion").click(function() {
+    socket.on('currentPoints',function(data){
+        console.log(":points:"+data["name"]+":");
+        $("p#playerName").text(data["name"] + " : " + (data["point"]) );
+    });
+    socket.on('getLeaders',function(data){
+        console.log(":Leaders:"+JSON.stringify(data)+":");
+        //$("p#leaderList").text(JSON.stringify(data));
+        $("#leaderDiv").empty();
+        $("#leaderDiv").append("<ol></ol>");
+        for(var i in data) {
+            var li = "<li>";
+            $("ol").append("<li>"+ data[i]["name"]+" "+data[i]["point"]+"</li>");
+        }
+    });
+
+    $("#newGame").click(function() {
         socket.emit("movePage");
         window.location.href = "/";
-    });
-    
+    }); 
 }); 
 </script>
 
 <style>
 .header {
-  /* display: flex; */
-  /* justify-content: space-between; */
   height: 5vh;
-  /* width: 88vw; */
   padding: 0 1vw;
   color: white;
   text-align: center;
   font-size: 34px;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  height: 90vh;
+  width: 100vw;
+}
+.gamePoints{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  color: white;
+  margin:0;
+}
+.leaders{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  margin:0;
+}
+.color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 43vw;
+  height: 43vh;
+  margin: 1vh 1vw;
+}
+
+.color > img {
+  width: 15vw;
+  height: 15vw;
+  border: 1px solid black;
+}
+
+body {
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* margin: 100; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between
+}
+
+#newGame {
+    width: 15vw;
+}
+
 </style>
 
 <body background="images/champion.jpg" >
 
-<div class="header"> Leaders </div>
+<!-- <div class="header"> Leaders </div> -->
+<p class="gamePoints" id="playerName"></p>
+<!-- <p class="gamePoints" id="point">0</p> -->
+<div class="leaders" id="leaderDiv"> </div>
 <!-- <button raised(trigger)="scores()">Leaderboard</button> -->
 <input type="button" id="newGame" value="New Game">
 </body>

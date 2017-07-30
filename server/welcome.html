@@ -8,9 +8,11 @@ socket.on('connected', function(data) {
     console.log("Welcome Socket"+socket["id"]);
 
     $("#startGame").click(function() {
-        console.log("Begin Game");
+        socket.emit("recordName",$("#playerName").val());
+        console.log( $("#playerName").val() );
         socket.emit("movePage");
         window.location.href = "/game";
+        
     });
 
     $("#leaderBoard").click(function() {
@@ -24,8 +26,7 @@ socket.on('connected', function(data) {
 
 <body background="images/BlueMedical.jpg" >
 <div>Welcome!</div>
-
-<input label="Name" required[(ngModel)]="name">
+<input type="text" id="playerName" />
 <!-- <button raised(trigger)="scores()">Leaderboard</button> -->
 <input type="button" id="startGame" value="Start Game">
 <input type="button" id="leaderBoard" value="Leader Board">
