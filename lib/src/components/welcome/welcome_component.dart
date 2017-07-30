@@ -21,7 +21,6 @@ import 'package:angular2/router.dart';
 class WelcomeComponent implements OnInit {
   final Router _router;
   String name = "";
-  int maxLength = 10;
   
   WelcomeComponent(this._router) {}
   
