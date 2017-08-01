@@ -12,9 +12,9 @@
 #inputs {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  height: 55vh;
-  margin-bottom: 1vh;
+  justify-content: space-between;
+  height: 43vh;
+  margin-bottom: 13vh;
 }
 
 material-input {
@@ -29,4 +29,6 @@ material-button {
   height: 22vh;
   border-radius: 87vw !important;
   color: transparent !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
