@@ -17,8 +17,9 @@
   justify-content: space-between;
   align-items: center;
   height: 5vh;
-  width: 89vw;
+  width: 83vw;
   font-size: 5vh;
+  color: white;
 }
 
 #name {
@@ -43,17 +44,23 @@
 #container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-content: space-around;
   height: 90vh;
   width: 50vw;
 }
 
-.codes {
+.code-row {
   display: flex;
-  justify-content: space-around;
-  width: 100%;
+  justify-content: space-between;
+  width: 40.5vw;
 }
 
 #top-codes {
   margin-top: -4vh;
+}
+
+.code {
+  width: 10vw;
+  height: 10vw;
 }

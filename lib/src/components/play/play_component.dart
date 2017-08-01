@@ -49,7 +49,6 @@ class PlayComponent implements OnInit {
   PlayComponent(this._router, this._routeParams, this._leaderboardService) {}
 
   void ngOnInit() {
-    print('on init');
     name = _routeParams.get('name');
     score = 0;
     countDown = 3;
