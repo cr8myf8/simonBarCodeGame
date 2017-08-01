@@ -24,14 +24,13 @@ socket.on('connected', function(data) {
 </script>
 <style>
 
-.nameText {
+#playerName {
     opacity: 0.5;
-    width: 50vw;
-    height: 9.5vw;
-    font-size: 5vw;
-    position: relative;
-    left: 33vw;
-    top: 8.0vw;
+    display: flex;
+    width: 84%;
+    height: 16%;
+    margin-left: 33vw;
+    font-size: -webkit-xxx-large;
 }
 #startGame {
     cursor: pointer;
@@ -40,27 +39,35 @@ socket.on('connected', function(data) {
     height:11vw;
     position: relative;
     left: 37vw;
-    top: -2vw;
+    bottom: 20vw;
     border-radius: 60px;
 }
 .backScreen {
     background-repeat: no-repeat;
-    background-size: cover;
-    /* margin: 100; */
-    color: white;
-    display: flex;
-    flex-direction: column;
+    background-size: contain;
     justify-content: space-between
 }
 .erase {
    opacity: 0.0;
 }
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100vh;
+    width: 60vw;
+}
+html { overflow-y: hidden; }
+
 
 </style>
 
 <body class = "backScreen" background="images/screen1.jpg" >
-<div class = "erase" >Welcome!</div>
-<input class = "nameText" type="text" id="playerName" />
+
+<div class="container">
+<input type="text" id="playerName" />
+</div>
 <!-- <button raised(trigger)="scores()">Leaderboard</button> -->
 <input type="button" id="startGame" value="Start Game">
 <!--<input type="button" id="leaderBoard" value="Leader Board">-->

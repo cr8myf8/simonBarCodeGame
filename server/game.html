@@ -9,7 +9,21 @@
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function(data) {
       console.log("client socket:"+socket["id"])
-      socket.emit("startGame" );
+      var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+      var count=6;
+      function timer()
+        {
+          count=count-1;
+          if (count <= 0)
+          {
+            clearInterval(counter);
+            socket.emit("startGame" );
+            document.getElementById("countDown").innerHTML= "";
+            return;
+          }
+        console.log("Start in" +count);
+        document.getElementById("countDown").innerHTML= "Start in " +count ; // watch for spelling
+        }
 
       $("#mainMenu").click(function (data) {
         socket.emit("movePage:"+socket["id"]);
@@ -37,18 +51,22 @@
         var num = parseInt(data["color"]);
         switch(num){
           case 1:
+            console.log("switch1")
             $("#green").animate({opacity:".1"},data["difficulty"]);
             $("#green").animate({opacity:"1"},data["difficulty"]);
             break;
             case 2:
+             console.log("switch2")
              $("#red").animate({opacity:".1"},data["difficulty"]);
              $("#red").animate({opacity:"1"},data["difficulty"]);
             break;
             case 3:
+            console.log("switch3")
              $("#yellow").animate({opacity:".1"},data["difficulty"]);
              $("#yellow").animate({opacity:"1"},data["difficulty"]);
             break;
             case 4:
+            console.log("switch4")
              $("#blue").animate({opacity:".1"},data["difficulty"]);
              $("#blue").animate({opacity:"1"},data["difficulty"]);
             break;
@@ -109,7 +127,7 @@
 
 .backScreen {
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     /* margin: 100; */
     color: white;
     display: flex;
@@ -118,7 +136,7 @@
     background-position: center;
 }
 
-#green {
+#divSpacer {
   margin-top: -4vh;
 }
 #left {
@@ -147,19 +165,19 @@ html { overflow-y: hidden; }
 
   <body class = "backScreen" background="images/screen2.jpg" >
   <div id="header">
-    <div id="left">L</div>
-    <div id="center">C</div>
+    <div id="left"><p class="gamePoints" id="time">0</p></div>
+    <div id="center"><p class="gamePoints" id="countDown">Start in</p></div>
     <div id="right"><p class="gamePoints" id="point">0</p></div>
   </div>
     <!-- <form><select id="myCOM" ></select></form> -->
     <div class="container">
-      <div class="color" id="green">
-        <img src="images/1.png">
-        <img src="images/2.png">
+      <div class="color" id="divSpacer">
+        <img id="green" src="images/1.png">
+        <img id="red" src="images/2.png">
       </div>
       <div class="color" >
-        <img src="images/3.png">
-        <img src="images/4.png">
+        <img id="yellow" src="images/3.png">
+        <img id="blue" src="images/4.png">
       </div>
     </div>
     <input type="button" id="mainMenu" value="Back">
