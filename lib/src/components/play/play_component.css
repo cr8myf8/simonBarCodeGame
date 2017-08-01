@@ -3,9 +3,10 @@
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-image: url("assets/retail-blue.jpg");
+  background-image: url("assets/code_play.svg");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
+  background-position: center;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -16,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   height: 5vh;
-  width: 98vw;
+  width: 89vw;
   font-size: 5vh;
 }
 
@@ -30,6 +31,7 @@
   display: flex;
   justify-content: center;
   width: 33.33vw;
+  color: white;
 }
 
 #score {
@@ -41,55 +43,17 @@
 #container {
   display: flex;
   flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  /*height: 90vh;*/
-  /*width: 60vw;*/
-  height: 90%;
-  width: 50%;
-  background-image: url("assets/both.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+  align-content: space-around;
+  height: 90vh;
+  width: 50vw;
 }
 
-.color {
+.codes {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 22vw;
-  height: 38vh;
-  margin: 1vw 1vw;
+  justify-content: space-around;
+  width: 100%;
 }
 
-#red > img {
-  margin-top: 2vh;
-  margin-left: 2vw;
-  width: 9vw;
-}
-
-#green > img {
-  margin-top: 2vh;
-  margin-right: 2vw;
-  width: 9vw;
-}
-
-#yellow > img {
-  margin-bottom: 2vh;
-  margin-left: 2vw;
-  width: 9vw;
-}
-
-#blue > img {
-  margin-bottom: 2vh;
-  margin-right: 2vw;
-  width: 9vw;
-}
-
-material-button {
-  position: absolute;
-  bottom: 0.5vh;
-  left: 0;
-  font-size: 2vh;
-  background-color: white;
+#top-codes {
+  margin-top: -4vh;
 }

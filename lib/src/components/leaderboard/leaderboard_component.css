@@ -1,15 +1,14 @@
 :host {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   width: 100vw;
   height: 100vh;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-image: url("assets/champion.jpg");
+  background-image: url("assets/code_leaderboard.svg");
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.8;
-  color: white;
+  background-position: center;
 }
 
 #title {
@@ -18,10 +17,9 @@
 
 #current-player {
   display: flex;
-  width: 40vw;
-  justify-content: space-around;
+  justify-content: space-between;
+  width: 26vw;
   font-size: 6vh;
-  margin-bottom: 5vh;
   animation: blinker 1.5s linear infinite;
 }
 
@@ -42,8 +40,20 @@
   justify-content: space-between;
 }
 
+.rank {
+  display: flex;
+  justify-content: flex-end;
+  width: 2vw;
+}
+
 material-button {
+  display: flex;
+  justify-content: center;
+  width: 18vh;
+  height: 18vh;
   font-size: 2vh;
   border: 1px solid;
-  border-radius: 10% !important;
+  border-radius: 50% !important;
+  margin-bottom: 2vh !important;
+  color: transparent !important;
 }

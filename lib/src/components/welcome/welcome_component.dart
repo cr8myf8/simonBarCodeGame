@@ -13,7 +13,8 @@ import 'package:angular2/router.dart';
   templateUrl: 'welcome_component.html',
   directives: const [
     CORE_DIRECTIVES,
-//    ROUTER_DIRECTIVES,
+    MaterialInputComponent,
+    MaterialMultilineInputComponent,
     materialDirectives,
   ],
   providers: const [materialProviders]

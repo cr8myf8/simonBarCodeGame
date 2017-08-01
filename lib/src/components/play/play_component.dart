@@ -60,7 +60,6 @@ class PlayComponent implements OnInit {
     gameTimerMsg = gameTime > 0 ? gameTime.toString() : 'END GAME';
 
     socket = IO.io('http://127.0.0.1:3000', {'forceNew': true});
-//    socket = IO.io('http://localhost:3000');
     socket.on('connect', (_) {
       print('Socket connected (client)');
 
@@ -87,7 +86,6 @@ class PlayComponent implements OnInit {
 //
             if (gameTime == 0) {
               print('game over');
-//              gameTimer.cancel();
               _updateLeaderboard();
             }
           });
@@ -110,21 +108,12 @@ class PlayComponent implements OnInit {
       }
       animation = element.animate([{"opacity": 100}, {"opacity": 0}], 150);
       animation.play();
-//      animation.cancel();
     });
 
     // when the server acknowledges a correct scan, update the score
     socket.on('point', (_) {
       score++;
     });
-
-    // when the server indicates it has written the leaderboard file
-//    socket.on('ended game', (_) {
-//      gameInProgress = false;
-//      if (countDownTimer.isActive) countDownTimer.cancel();
-//      if (gameTimer.isActive) gameTimer.cancel();
-//      _cleanupSocket();
-//    });
 
     socket.on('disconnected', (_) => print('socket disconnected (server)'));
   }

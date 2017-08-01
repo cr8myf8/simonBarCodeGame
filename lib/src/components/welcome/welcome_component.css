@@ -1,23 +1,32 @@
 :host {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   width: 100vw;
   height: 100vh;
-  background-image: url("assets/BlueMedical.jpg");
-  background-repeat: no-repeat;
+  background-image: url("assets/code_welcome.svg");
   background-size: cover;
-  justify-content: center;
-  align-items: center;
 }
 
 #inputs {
   display: flex;
-  width: 50vw;
-  height: 23vh;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 55vh;
+  margin-bottom: 1vh;
 }
 
-material-input, material-button {
-  font-size: 3vh;
+material-input {
+  width: 26vw;
+  font-size: 10vh;
+}
+
+material-button {
+  display: flex;
+  justify-content: center;
+  width: 26vw;
+  height: 22vh;
+  border-radius: 87vw !important;
+  color: transparent !important;
 }
