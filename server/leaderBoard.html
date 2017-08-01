@@ -63,38 +63,31 @@ socket.on('connected', function(data) {
   font-size: 30px;
   margin:0;
 }
-.color {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 43vw;
-  height: 43vh;
-  margin: 1vh 1vw;
-}
-
-.color > img {
-  width: 15vw;
-  height: 15vw;
-  border: 1px solid black;
-}
 
 body {
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
     /* margin: 100; */
-    color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between
 }
 
 #newGame {
-    width: 15vw;
+    cursor: pointer;
+    opacity: 0;
+    width: 11vw;
+    height:11vw;
+    position: relative;
+    left: 44vw;
+    bottom: 0vw;
+    border-radius: 50%;
 }
 
 </style>
 
-<body background="images/champion.jpg" >
+<body background="images/screen3.jpg" >
 
 <!-- <div class="header"> Leaders </div> -->
 <p class="gamePoints" id="playerName"></p>

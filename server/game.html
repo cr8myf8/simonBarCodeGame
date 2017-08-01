@@ -63,22 +63,22 @@
     
 </script>
 <style>
-.header {
+#header {
   display: flex;
   justify-content: space-between;
   height: 5vh;
   width: 88vw;
-  padding: 0 1vw;
 }
 
 .container {
   display: flex;
-  flex-direction: column;
+  /*flex-direction: column;*/
   flex-wrap: wrap;
-  /*justify-content: center;*/
+  justify-content: center;
+  align-content: space-around;
   /*align-items: center;*/
-  height: 90vh;
-  width: 100vw;
+  height: 100vh;
+  width: 63vw;
 }
 .gamePoints{
   display: flex;
@@ -88,51 +88,77 @@
   margin:0;
 }
 .color {
-  display: flex;
+  /*display: flex;
   justify-content: center;
   align-items: center;
-  width: 43vw;
-  height: 43vh;
-  margin: 1vh 1vw;
+  width: 40vw;
+  height: 40vh;
+  margin: 1vh 1vw;*/
+  display: flex;
+  width: 100%;
+  height: 20%;
+  justify-content: space-around;
+
 }
 
 .color > img {
-  width: 15vw;
-  height: 15vw;
+  width: 10vw;
+  height: 10vw;
   border: 1px solid black;
 }
 
+.backScreen {
+    background-repeat: no-repeat;
+    background-size: contain;
+    /* margin: 100; */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-position: center;
+}
+
 #green {
-  background-color: green;
+  margin-top: -4vh;
+}
+#left {
+  width: 33vw;
+  display: flex;
+  justify-content: flex-start;
+}
+#center {
+  width: 33vw;
+  display: flex;
+  justify-content: center;
+}
+#right {
+  width: 33vw;
+  display: flex;
+  justify-content: flex-end;
 }
 
-#red {
-  background-color: red;
+body {
+  display: flex;
+  align-items: center;
 }
 
-#yellow {
-  background-color: yellow;
-}
-
-#blue {
-  background-color: blue;
-}
+html { overflow-y: hidden; }
 </style>
 
-  <body background="images/retail-blue.jpg" >
-    <p class="gamePoints" id="point">0</p>
+  <body class = "backScreen" background="images/screen2.jpg" >
+  <div id="header">
+    <div id="left">L</div>
+    <div id="center">C</div>
+    <div id="right"><p class="gamePoints" id="point">0</p></div>
+  </div>
     <!-- <form><select id="myCOM" ></select></form> -->
     <div class="container">
       <div class="color" id="green">
         <img src="images/1.png">
-      </div>
-      <div class="color" id="red">
         <img src="images/2.png">
       </div>
-      <div class="color" id="yellow">
+      <div class="color" >
         <img src="images/3.png">
-      </div>
-      <div class="color" id="blue">
         <img src="images/4.png">
       </div>
     </div>
