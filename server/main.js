@@ -42,7 +42,7 @@ app.get('/leaderBoard', function (req, res) {
 var gameSocket; // magic socket pointer
 io.on('connection', function (socket) {
   //console.log(Object.keys(io.sockets.sockets));
-  socket.emit('connected');
+  socket.emit('connected',userConfig["GAMETIME"]);
 
   socket.on('startGame', function() {
     gameSocket = socket;

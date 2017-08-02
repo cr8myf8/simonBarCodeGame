@@ -7,22 +7,32 @@
  <script src="/js/socket.io.js"></script>
   <script>
     var socket = io.connect('http://localhost:3000');
-    socket.on('connected', function(data) {
-      console.log("client socket:"+socket["id"])
+    socket.on('connected', function(socketGameTime) {
+      console.log("client socket:"+socketGameTime)
+      var gameTime = parseInt(socketGameTime)/1000;
       var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
-      var count=6;
+      var count=gameTime+6;
       function timer()
         {
           count=count-1;
-          if (count <= 0)
-          {
-            clearInterval(counter);
+          console.log("count:"+(count-gameTime));
+          if (count > gameTime){
+            var countDown = count-gameTime;
+            console.log("countdown:"+(count-gameTime));
+            document.getElementById("countDown").innerHTML= "Start in " +(countDown) ; // watch for spelling
+          }else 
+           if (count == gameTime){
             socket.emit("startGame" );
+            document.getElementById("countDown").innerHTML = "GO" ;
+           }else
+           if (count < gameTime && count > 0 ){
+             document.getElementById("countDown").innerHTML = count ;
+           }else {
+            clearInterval(counter);
             document.getElementById("countDown").innerHTML= "";
             return;
           }
-        console.log("Start in" +count);
-        document.getElementById("countDown").innerHTML= "Start in " +count ; // watch for spelling
+
         }
 
       $("#mainMenu").click(function (data) {
@@ -165,7 +175,7 @@ html { overflow-y: hidden; }
 
   <body class = "backScreen" background="images/screen2.jpg" >
   <div id="header">
-    <div id="left"><p class="gamePoints" id="time">0</p></div>
+    <div id="left"><p class="gamePoints" id="time"></p></div>
     <div id="center"><p class="gamePoints" id="countDown">Start in</p></div>
     <div id="right"><p class="gamePoints" id="point">0</p></div>
   </div>
